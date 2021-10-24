@@ -2,3 +2,7 @@ environ.py
 /__pycache__
 bot-pfp.png
 github
+.gitgnore
+private.py
+/private
+testing.py
