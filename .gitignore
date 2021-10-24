@@ -1,8 +1,20 @@
+# .gitignore
+# token
 environ.py
 /__pycache__
+
+# bot's pfp
 bot-pfp.png
+
+# program that i run to publish my new commits to github
 github
+
+# .gitignore itself
 .gitgnore
+
+# private
 private.py
 /private
+
+# testing files
 testing.py
