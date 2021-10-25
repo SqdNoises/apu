@@ -2,6 +2,7 @@
 # Importing Packages
 print('Importing packages...')
 print('Importing discord...')
+from types import prepare_class
 import discord
 print('Importing asyncio...')
 import asyncio
@@ -30,17 +31,32 @@ print('Done.')
 # on_ready
 @client.event
 async def on_ready():
+    reloadinfo = os.getenv('reloadinfo')
+    channel = os.getenv('channel')
+    if channel != None:
+        channel = client.get_channel(int(channel))
     user = str(client.user)
     os.system('clear')
     print('Logged in! (' + user + ')')
     print("")
     print("Setting Status...")
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you"), status=discord.Status.idle)
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you."), status=discord.Status.idle)
     os.system("clear")
     print('Logged in! (' + user + ')')
     print("")
     print("Status Set.")
     print("")
+    if reloadinfo == 'reloading':
+        await channel.send('**Reloaded!**')
+        os.environ['reloadinfo'] = 'reloaded'
+        print('Reloaded!')
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you. Reloaded!"), status=discord.Status.idle)
+        await asyncio.sleep(5)
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you."), status=discord.Status.idle)
+    else:
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you. Connected!"), status=discord.Status.idle)
+        await asyncio.sleep(5)
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you."), status=discord.Status.idle)
 
 # on_message
 @client.event
@@ -66,9 +82,8 @@ async def on_message(message):
     # main
     # if author is bot itself
     if author == client.user:
-        if msg == '**Please mention who to moderate the nickname of!**':
-            await wait(7)
-            await delete()
+        if i == 1:
+            pass
         else:
             return
     
@@ -112,8 +127,11 @@ async def on_message(message):
 
     if msg == 'os!reload' or msg == 'os!r':
         if author.id in admins:
+            channel = message.channel.id
+            os.environ['reloadinfo'] = 'reloading'
+            os.environ['channel'] = str(channel)
             await react('<a:Animated_Checkmark:901803000861966346>')
-            await reply('> **Reloading...**')
+            await reply('**Reloading...**')
             print('Reloading Bot...')
             await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="nobody. Reloading!"), status=discord.Status.dnd)
             os.system('python3 ~/workspace/apu/main.py')
@@ -125,7 +143,7 @@ async def on_message(message):
     if msg == 'os!killprocess' or msg =='os!kp':
         if author.id in admins:
             await react('<a:Animated_Checkmark:901803000861966346>')
-            await reply('> **Killing my process...**')
+            await reply('**Killing my process...**')
             print('Process Killed.')
             await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="nobody. Process killed."), status=discord.Status.dnd)
             os._exit(1)
@@ -136,14 +154,21 @@ async def on_message(message):
     if msg == 'os!test':
         if author.id in admins:
             print('os!test called.')
-            emojis = message.guild.emojis
-            print(emojis)
-            await react('<a:Animated_Checkmark:901803000861966346>')
-            await reply('Check my console!')
+            try:
+                await react('<a:Animated_Checkmark:901803000861966346>')
+                await reply('Check my console!')
+            except Exception as e:
+                await react('<a:no:901803557014077480>')
+                await reply('<a:no:901803557014077480> **`Exception: `**`' + str(e) + '`')
     
     # mod commands
+    if msg.startswith('os!nick'):
+        pass
 
     # non-admin-mod
+    if msg == 'os!help':
+        await reply('Hey sorry but uhh... Help command isn\'t available yet...')
+
     if 'closed-source' in lowmsg or 'closed source' in lowmsg:
         await reply('**Proprietary software** is **__bad__** for your **health** and **privacy**')
 
@@ -177,6 +202,9 @@ async def on_message(message):
     
     if lowmsg == 'owo':
         await reply('uwu')
+    
+    if lowmsg == 'hack' or lowmsg == 'hacked':
+        await reply(file=discord.File('hacc.gif'))
 
 # on member join
 @client.event
