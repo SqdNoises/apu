@@ -61,19 +61,62 @@ async def on_message(message):
     
     # admins
     admins = [840644782673100870, 842457844724400142, 884099213615587338, 477683725673693184]
+    mods = [840644782673100870, 842457844724400142, 884099213615587338, 477683725673693184]
     
     # main
     # if author is bot itself
     if author == client.user:
-        return
+        if msg == '**Please mention who to moderate the nickname of!**':
+            await wait(7)
+            await delete()
+        else:
+            return
     
     # admin commands
-    if msg == 'os!reload':
+    if msg == 'os!helpadmin' or msg == 'os!ha' or msg == 'os!admin':
+        if author.id in admins:
+            try:
+                channel = await author.create_dm()
+                await channel.send('''```py
+# Admin Commands - Admin Help - APU Utils
+# Prefix: os!
+"os!helpadmin" - Sends you a DM with the Admin Commands Page
+
+# Fun
+"os!deadchat" - Sends a dead chat meme after deleting your message
+
+# Bot Related
+"os!reload" - Reloads the bot's code
+"os!killprocess" - Kills the bot's process
+"os!test" - tests done by sqd
+```
+```py
+# Command Aliases - Admin Help - APU Utils
+# Prefix: os!
+"os!helpadmin" - os!ha, os!admin
+"os!reload" - os!r
+"os!killprocess" - os!kp
+```''')
+                await react('<a:GreenCheck:901802575052025917>')
+                await reply('Check your DMs!')
+            except Exception as e:
+                await reply('Couldn\'t DM you! Please make sure to have your DMs enabled!\n**`Exception: `**`' + str(e) + '`')
+        
+        else:
+            await react('<a:no:901803557014077480>')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
+
+    if msg == 'os!deadchat':
+        await delete()
+        await sendmsg('Dead chat...', file=discord.File('dead-chat.mp4'))
+
+    if msg == 'os!reload' or msg == 'os!r':
         if author.id in admins:
             await react('<a:Animated_Checkmark:901803000861966346>')
             await reply('> **Reloading...**')
+            print('Reloading Bot...')
             await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="nobody. Reloading!"), status=discord.Status.dnd)
-            os.system('python3 apu/main.py')
+            os.system('python3 ~/workspace/apu/main.py')
             os._exit(1)
         else:
             await react('<a:no:901803557014077480>')
@@ -83,22 +126,13 @@ async def on_message(message):
         if author.id in admins:
             await react('<a:Animated_Checkmark:901803000861966346>')
             await reply('> **Killing my process...**')
+            print('Process Killed.')
             await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="nobody. Process killed."), status=discord.Status.dnd)
             os._exit(1)
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
-    
-    if msg == 'os!jl':
-        if author.id in admins:
-            await react('<a:Animated_Checkmark:901803000861966346>')
-        else:
-            await react('<a:no:901803557014077480>')
-            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
-    
-    #if author.id in admins:
-        #emojibool = 
-    
+            
     if msg == 'os!test':
         if author.id in admins:
             print('os!test called.')
@@ -107,7 +141,9 @@ async def on_message(message):
             await react('<a:Animated_Checkmark:901803000861966346>')
             await reply('Check my console!')
     
-    # non-admin
+    # mod commands
+
+    # non-admin-mod
     if 'closed-source' in lowmsg or 'closed source' in lowmsg:
         await reply('**Proprietary software** is **__bad__** for your **health** and **privacy**')
 
@@ -135,6 +171,12 @@ async def on_message(message):
 
     if lowmsg == 'your mom':
         await reply('what?')
+    
+    if lowmsg == 'uwu':
+        await reply('owo')
+    
+    if lowmsg == 'owo':
+        await reply('uwu')
 
 # on member join
 @client.event
