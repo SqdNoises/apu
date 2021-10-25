@@ -2,7 +2,6 @@
 # Importing Packages
 print('Importing packages...')
 print('Importing discord...')
-from types import prepare_class
 import discord
 print('Importing asyncio...')
 import asyncio
@@ -25,7 +24,7 @@ print('Done.')
 
 # Discord Client
 print('Assigning `client` to `discord.Client()`...')
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.all())
 print('Done.')
 
 # on_ready
@@ -123,7 +122,7 @@ async def on_message(message):
 
     if msg == 'os!deadchat':
         await delete()
-        await sendmsg('Dead chat...', file=discord.File('dead-chat.mp4'))
+        await sendmsg('Dead chat...', file=discord.File('files/media/dead-chat.mp4'))
 
     if msg == 'os!reload' or msg == 'os!r':
         if author.id in admins:
@@ -162,12 +161,23 @@ async def on_message(message):
                 await reply('<a:no:901803557014077480> **`Exception: `**`' + str(e) + '`')
     
     # mod commands
-    if msg.startswith('os!nick'):
-        pass
+    if msg.startswith('os!modcheck'):
+        if author.id in mods:
+            await react('<a:Animated_Checkmark:901803000861966346>')
+            await sendmsg('<a:Animated_Checkmark:901803000861966346> **You are whitelisted as a mod!**')
+        else:
+            await react('<a:no:901803557014077480>')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as a mod!**')
 
     # non-admin-mod
     if msg == 'os!help':
-        await reply('Hey sorry but uhh... Help command isn\'t available yet...')
+        await reply('''```py
+# Commands - Help - APU Utils
+# Prefix: os!
+"os!help" - Replies with a list of commands
+
+### More public commands cooming soon (hopefully) ###
+```''')
 
     if 'closed-source' in lowmsg or 'closed source' in lowmsg:
         await reply('**Proprietary software** is **__bad__** for your **health** and **privacy**')
@@ -204,7 +214,7 @@ async def on_message(message):
         await reply('uwu')
     
     if lowmsg == 'hack' or lowmsg == 'hacked':
-        await reply(file=discord.File('hacc.gif'))
+        await reply(file=discord.File('files/media/hacc.gif'))
 
 # on member join
 @client.event
@@ -224,7 +234,7 @@ async def on_member_remove(member):
     print('member left')
     channel = client.get_channel(901761742609219595)
     sendmsg = channel.send
-    byelist = ['just left the Anti Proprietary Union!', ' is now closed-source gang.', 'just left the server! (Closed-source gang??)']
+    byelist = ['just left the Anti Proprietary Union!', ' is now closed-source gang.', 'just left the server! (Closed-source gang??)', 'just left!']
     n = len(byelist) - 1
     num = random.randint(0, n)
     bye = byelist[num]
