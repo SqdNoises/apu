@@ -133,7 +133,7 @@ async def on_message(message):
             await reply('**Reloading...**')
             print('Reloading Bot...')
             await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="nobody. Reloading!"), status=discord.Status.dnd)
-            os.system('python3 ~/workspace/apu/main.py')
+            os.system('python main.py')
             os._exit(1)
         else:
             await react('<a:no:901803557014077480>')
