@@ -16,14 +16,14 @@ print('Importing environ (from environ.py)...')
 import environ
 print('Modules imported.')
 
-# os.getenv - setting and getting token
+# environ.token, os.getenv - setting and getting token
 environ.token()
 print('Setting bot token from environmental variables...')
 never_gonna_give_you_up = os.getenv('TOKEN')
 print('Done.')
 
 # Discord Client
-print('Assigning `client` to `discord.Client()`...')
+print('Assigning `client` to `discord.Client()` with all intents...')
 client = discord.Client(intents=discord.Intents.all())
 print('Done.')
 
@@ -85,13 +85,27 @@ async def on_message(message):
             pass
         else:
             return
-    
+     
+     # checks if message is from guild
+    if message.guild == None:
+       if msg.startswith('os!'):
+           await react('<a:no:901803557014077480>')
+           await reply('<a:no:901803557014077480> **You cannot use my commands in DMs!**')
+           return
+       else:
+           rand = random.randint(0, 100)
+           rand2 = random.randint(0, 100)
+           if rand == rand2:
+               await sendmsg('You cannot use my messages in DMs!\n\nFun Fact:\n*There\'s a 1in 100 chance that you are seeing this message!')
+           return
+     
     # admin commands
     if msg == 'os!helpadmin' or msg == 'os!ha' or msg == 'os!admin':
         if author.id in admins:
             try:
                 channel = await author.create_dm()
-                await channel.send('''```py
+                await channel.send('''Here are my commands and aliases for commands.
+```py
 # Admin Commands - Admin Help - APU Utils
 # Prefix: os!
 "os!helpadmin" - Sends you a DM with the Admin Commands Page
@@ -114,6 +128,7 @@ async def on_message(message):
                 await react('<a:GreenCheck:901802575052025917>')
                 await reply('Check your DMs!')
             except Exception as e:
+                await react('<a:no:901803557014077480>')
                 await reply('Couldn\'t DM you! Please make sure to have your DMs enabled!\n**`Exception: `**`' + str(e) + '`')
         
         else:
@@ -159,7 +174,14 @@ async def on_message(message):
             except Exception as e:
                 await react('<a:no:901803557014077480>')
                 await reply('<a:no:901803557014077480> **`Exception: `**`' + str(e) + '`')
-    
+
+    if msg == 'os!checkthepins' or msg == 'os!ctp':
+        if author.id in admins:
+            await delete()
+            await sendmsg('<a:ctp:901802005230661662>')
+        else:
+            await reply('**no.**')
+
     # mod commands
     if msg.startswith('os!modcheck'):
         if author.id in mods:
@@ -179,14 +201,25 @@ async def on_message(message):
 ### More public commands cooming soon (hopefully) ###
 ```''')
 
+    if 'open-source > closed-source' in lowmsg or 'open source > closed source' in lowmsg or 'open-source > closed source' in lowmsg or 'open source > closed-source' in lowmsg or 'closed-source < open-source' in lowmsg or 'closed source < open source' in lowmsg or 'closed-source < open source' in lowmsg or 'closed source < open-source' in lowmsg:
+        await reply('Agreed!')
+        return
+    
+    if 'open-source < closed-source' in lowmsg or 'open source < closed source' in lowmsg or 'open-source < closed source' in lowmsg or 'open source < closed-source' in lowmsg or 'closed-source > open-source' in lowmsg or 'closed source > open source' in lowmsg or 'closed-source > open source' in lowmsg or 'closed source > open-source' in lowmsg:
+        await reply('You want to die?')
+        return
+
     if 'closed-source' in lowmsg or 'closed source' in lowmsg:
+        await reply('**Proprietary software** is **__bad__** for your **health** and **privacy**')
+        
+    if 'proprietary' in lowmsg and 'anti-proprietary' not in lowmsg and 'antiproprietary' not in lowmsg and 'anti proprietary' not in lowmsg and 'not proprietary' not in lowmsg and 'closed-source' not in lowmsg and 'closed source' not in lowmsg:
         await reply('**Proprietary software** is **__bad__** for your **health** and **privacy**')
 
     if lowmsg == ':gigachad:':
         await reply('Here, lemme help you.')
         await sendmsg('<:gigachad:901804317512720394>')
 
-    if 'gigachad' in lowmsg or 'giga chad' in lowmsg or 'i use arch btw' in lowmsg or 'i use debian btw' in lowmsg or 'i use mint btw' in lowmsg or 'i use garuda btw' in lowmsg:
+    if 'gigachad' in lowmsg and ':gigachad:' not in lowmsg or 'giga chad' in lowmsg or 'i use arch btw' in lowmsg or 'i use debian btw' in lowmsg or 'i use mint btw' in lowmsg or 'i use garuda btw' in lowmsg:
         await react('<:gigachad:901804317512720394>')
     
     if lowmsg == 'manjaro':
@@ -215,30 +248,44 @@ async def on_message(message):
     
     if lowmsg == 'hack' or lowmsg == 'hacked':
         await reply(file=discord.File('files/media/hacc.gif'))
+    
+    if client.user.mention == msg:
+        await reply('I\'m watching **you.**')
+    
+    if client.user.mention in msg and 'are you watching me' in lowmsg:
+        await reply('I\'m watching you.')
 
 # on member join
 @client.event
 async def on_member_join(member):
-    print('member joined')
+    print(f'{member} joined')
+    channel = await member.create_dm()
+    try:
+        await channel.send('Hello ' + member.mention + '!\nWelcome to **Anti Proprietary Union**!\n__Here\'s what you should do to get started__:\n> Read the rules to avoid getting punished. (<#901519584102854687>)\n> Talk in <#901860174539677706> chat!\nHope you have fun in our server.\n**Server invite:** https://discord.gg/7bDvDnpUZC\n\n**#open-source-gang** ❤️')
+        print('dm greet sent to ' + f'{member}')
+    except Exception as e:
+        print('failed to dm greet ' + f'{member}')
+        print(str(e))
     channel = client.get_channel(901761695033212939)
-    sendmsg = channel.send
-    greets = ['just arrived! Say hi!', 'just joined the Anti Proprietary Union!', 'is now Open-Source Gang.', 'just landed.', 'joined! Say hi!', 'just joined the Open-Source Gang!']
+    greets = ['just arrived! Say hi!', 'just joined the Anti Proprietary Union!', 'is now open-source gang.', 'just landed.', 'joined! Say hi!', 'just joined the open-source gang!', 'is now open-source gang!']
     n = len(greets) - 1
     num = random.randint(0, n)
     greet = greets[num]
-    await sendmsg(f'{member} ' + greet)
+    await channel.send(f'{member.mention} ' + greet)
+    print('alerted the server for member join (' + f'{member})')
 
 # on member leave
 @client.event
 async def on_member_remove(member):
-    print('member left')
+    print(f'{member} left')
     channel = client.get_channel(901761742609219595)
     sendmsg = channel.send
-    byelist = ['just left the Anti Proprietary Union!', ' is now closed-source gang.', 'just left the server! (Closed-source gang??)', 'just left!']
+    byelist = ['just left the Anti Proprietary Union!', 'is now closed-source gang.', 'just left the server! (Closed-source gang??)', 'just left!', 'is a proprietary software user!', 'left. Do they not like open-source software??']
     n = len(byelist) - 1
     num = random.randint(0, n)
     bye = byelist[num]
     await sendmsg(f'{member} ' + bye)
+    print('alerted the server for member leave (' + f'{member})')
 
 # logging into APU Utils
 print("Logging into APU Utils...")
