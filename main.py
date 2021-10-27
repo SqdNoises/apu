@@ -130,14 +130,20 @@ async def on_message(message):
             except Exception as e:
                 await react('<a:no:901803557014077480>')
                 await reply('Couldn\'t DM you! Please make sure to have your DMs enabled!\n**`Exception: `**`' + str(e) + '`')
-        
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
 
+    if msg == 'os!crash':
+        pass 
+
     if msg == 'os!deadchat':
-        await delete()
-        await sendmsg('Dead chat...', file=discord.File('files/media/dead-chat.mp4'))
+        if author.id in admins:
+            await delete()
+            await sendmsg('Dead chat...', file=discord.File('files/media/dead-chat.mp4'))
+        else:
+            await react('<a:no:901803557014077480>')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
 
     if msg == 'os!reload' or msg == 'os!r':
         if author.id in admins:
