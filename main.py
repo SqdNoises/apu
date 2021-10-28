@@ -203,9 +203,32 @@ async def on_message(message):
 # Commands - Help - APU Utils
 # Prefix: os!
 "os!help" - Replies with a list of commands
+"os!fosslist" - Replies with some useful FOSS alternative lists
 
 ### More public commands cooming soon (hopefully) ###
 ```''')
+
+    if msg == 'os!fosslist'
+        await reply('''> **Useful lists with FOSS alternatives and software:**
+<https://privacytools.io> -- **FOSS** and private alternatives to proprietary crap.
+<https://opensource.builders> -- Tool to find **FOSS** alternatives to proprietary software you might use.
+Also allows you to specify the programming language and license.''')
+
+    if 'closed source suck' in lowmsg or 'closed-source suck' in lowmsg or 'closed source is bad' in lowmsg or 'closed-source is bad' in lowmsg or 'closed-source bad' in lowmsg or 'closed source bad' in lowmsg or lowmsg == 'closed-source = bad' or lowmsg == 'closed source = bad' or lowmsg == 'proprietary = bad' or lowmsg == 'proprietary software = bad' or lowmsg == 'closed-source == bad' or lowmsg == 'closed source == bad' or lowmsg == 'proprietary == bad' or lowmsg == 'proprietary software == bad':
+        await reply('Agreed.')
+        return
+
+    if 'proprietary suck' in lowmsg and 'anti-proprietary' not in lowmsg and 'anti proprietary' not in lowmsg and 'not proprietary' not in lowmsg:
+        await reply ('Agreed.') 
+        return
+
+    if 'proprietary is bad' in lowmsg and 'anti-proprietary' not in lowmsg and 'anti proprietary' not in lowmsg and 'not proprietary' not in lowmsg:
+        await reply ('Agreed.') 
+        return
+
+    if 'proprietary bad' in lowmsg and 'anti-proprietary' not in lowmsg and 'anti proprietary' not in lowmsg and 'not proprietary' not in lowmsg:
+        await reply ('Agreed.') 
+        return
 
     if 'open-source > closed-source' in lowmsg or 'open source > closed source' in lowmsg or 'open-source > closed source' in lowmsg or 'open source > closed-source' in lowmsg or 'closed-source < open-source' in lowmsg or 'closed source < open source' in lowmsg or 'closed-source < open source' in lowmsg or 'closed source < open-source' in lowmsg:
         await reply('Agreed!')
