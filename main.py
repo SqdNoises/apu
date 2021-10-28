@@ -207,12 +207,12 @@ async def on_message(message):
 
 ### More public commands cooming soon (hopefully) ###
 ```''')
+
     if msg =="os!fosslists":
-        await reply('''
-        Useful lists with FOSS alternatives and software:
-        https://privacytools.io -- **FOSS** and private alternatives to proprietary crap.
-        https://opensource.builders -- Tool to find **FOSS** alternatives to proprietary software you might use. 
-        Also allows you to specify the programming language and license.''')
+        await reply('''> **Useful lists with FOSS alternatives and software:**
+<https://privacytools.io> -- **FOSS** and private alternatives to proprietary crap.
+<https://opensource.builders> -- Tool to find **FOSS** alternatives to proprietary software you might use.
+Also allows you to specify the programming language and license.''')
 
     if 'open-source > closed-source' in lowmsg or 'open source > closed source' in lowmsg or 'open-source > closed source' in lowmsg or 'open source > closed-source' in lowmsg or 'closed-source < open-source' in lowmsg or 'closed source < open source' in lowmsg or 'closed-source < open source' in lowmsg or 'closed source < open-source' in lowmsg:
         await reply('Agreed!')
