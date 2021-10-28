@@ -203,9 +203,16 @@ async def on_message(message):
 # Commands - Help - APU Utils
 # Prefix: os!
 "os!help" - Replies with a list of commands
+"os!fosslists" - Replies with some useful FOSS alternative lists
 
 ### More public commands cooming soon (hopefully) ###
 ```''')
+    if msg =="os!fosslists":
+        await reply('''text
+        Useful lists with FOSS alternatives and software:
+        https://privacytools.io -- **FOSS** and private alternatives to proprietary crap.
+        https://opensource.builders -- Tool to find **FOSS** alternatives to proprietary software you might use. 
+        Also allows you to specify the programming language and license.''')
 
     if 'open-source > closed-source' in lowmsg or 'open source > closed source' in lowmsg or 'open-source > closed source' in lowmsg or 'open source > closed-source' in lowmsg or 'closed-source < open-source' in lowmsg or 'closed source < open source' in lowmsg or 'closed-source < open source' in lowmsg or 'closed source < open-source' in lowmsg:
         await reply('Agreed!')
