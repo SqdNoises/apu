@@ -208,7 +208,7 @@ async def on_message(message):
 ### More public commands cooming soon (hopefully) ###
 ```''')
     if msg =="os!fosslists":
-        await reply('''text
+        await reply('''
         Useful lists with FOSS alternatives and software:
         https://privacytools.io -- **FOSS** and private alternatives to proprietary crap.
         https://opensource.builders -- Tool to find **FOSS** alternatives to proprietary software you might use. 
