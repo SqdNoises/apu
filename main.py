@@ -154,7 +154,7 @@ async def on_message(message):
             await reply('**Reloading...**')
             print('Reloading Bot...')
             await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="nobody. Reloading!"), status=discord.Status.dnd)
-            os.system('python main.py')
+            os.system('python3 main.py')
             os._exit(1)
         else:
             await react('<a:no:901803557014077480>')
@@ -208,7 +208,7 @@ async def on_message(message):
 ### More public commands cooming soon (hopefully) ###
 ```''')
 
-    if msg == 'os!fosslist'
+    if msg == 'os!fosslist':
         await reply('''> **Useful lists with FOSS alternatives and software:**
 <https://privacytools.io> -- **FOSS** and private alternatives to proprietary crap.
 <https://opensource.builders> -- Tool to find **FOSS** alternatives to proprietary software you might use.
