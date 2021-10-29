@@ -134,8 +134,6 @@ async def on_message(message):
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
 
-    if msg == 'os!crash':
-        pass 
 
     if msg == 'os!deadchat':
         if author.id in admins:
@@ -204,15 +202,27 @@ async def on_message(message):
 # Prefix: os!
 "os!help" - Replies with a list of commands
 "os!fosslist" - Replies with some useful FOSS alternative lists
+"os!source" - Replies with the link to source code for APU Utils
+"os!aliases" - Replies with aliases to commands
 
 ### More public commands cooming soon (hopefully) ###
+```''')
+
+    if msg == 'os!aliases':
+        await reply('''```py
+# Aliases - APU Utils
+# Prefix: os!
+"os!source" - os!sourcecode, os!source-code, os!sc, os!code
 ```''')
 
     if msg == 'os!fosslist':
         await reply('''> **Useful lists with FOSS alternatives and software:**
 <https://privacytools.io> -- **FOSS** and private alternatives to proprietary crap.
 <https://opensource.builders> -- Tool to find **FOSS** alternatives to proprietary software you might use.
-Also allows you to specify the programming language and license.''')
+*Also allows you to specify the programming language and license.*''')
+
+    if msg.startswith('os!sc') or msg.startswith('os!sourcecode') or msg.startswith('os!source-code') or msg.startswith('os!source') or msg.startswith('os!code'):
+        await reply('shut up and here\'s my code: <https://github.com/SqdNoises/apu>')
 
     if 'closed source suck' in lowmsg or 'closed-source suck' in lowmsg or 'closed source is bad' in lowmsg or 'closed-source is bad' in lowmsg or 'closed-source bad' in lowmsg or 'closed source bad' in lowmsg or lowmsg == 'closed-source = bad' or lowmsg == 'closed source = bad' or lowmsg == 'proprietary = bad' or lowmsg == 'proprietary software = bad' or lowmsg == 'closed-source == bad' or lowmsg == 'closed source == bad' or lowmsg == 'proprietary == bad' or lowmsg == 'proprietary software == bad':
         await reply('Agreed.')
@@ -277,12 +287,36 @@ Also allows you to specify the programming language and license.''')
     
     if lowmsg == 'hack' or lowmsg == 'hacked':
         await reply(file=discord.File('files/media/hacc.gif'))
+     
+    # "cum" stands for client user mention, please dont end me ;-;
+    cum = client.user.mention
+    cumstr = str(client.user.mention)
+    cum2 = cum.replace('<@', '<@!')
+
+    if client.user.mention in msg or cum2 in msg:
+            if msg == cum or msg == cum2:
+                await reply('''```py
+Hi! I am APU Utils.
+# indev
+```''')
+            elif cum in msg or cum2 in msg:
+                if 'are you watching me' or 'are u watching me' or 'are you fucking watching me' or 'are u fucking watching me':
+                    await reply('I\'m watching you.')
+
+    if msg == '<@&903299738542161962>':
+        await reply('You\'re pinging my integration role, you dummy dumbo head.')
+
+    if lowmsg.startswith('aaa') and lowmsg.endswith('aaa pee you you tils'):
+        await reply('No, it\'s **APU Utils**, not **' + msg + '** you dumbo head.')
     
-    if client.user.mention == msg:
-        await reply('I\'m watching **you.**')
+    if lowmsg.startswith('aaa') and lowmsg.endswith('aaa p u u tils'):
+        await reply('No, it\'s **APU Utils**, not **' + msg + '** you dumbo head.')
     
-    if client.user.mention in msg and 'are you watching me' in lowmsg:
-        await reply('I\'m watching you.')
+    if lowmsg.startswith('aaa') and lowmsg.endswith('aaa pu utils'):
+        await reply('No, it\'s **APU Utils**, not **' + msg + '** you dumbo head.')
+    
+    if lowmsg.startswith('aaa') and lowmsg.endswith('aaapu utils'):
+        await reply('No, it\'s **APU Utils**, not **' + msg + '** you dumbo head.')
 
 # on member join
 @client.event
