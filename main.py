@@ -204,7 +204,7 @@ async def on_message(message):
 "os!fosslist" - Replies with some useful FOSS alternative lists
 "os!source" - Replies with the link to source code for APU Utils
 "os!aliases" - Replies with aliases to commands
-
+"os!distros" - Replies with a list of linux distros.
 ### More public commands cooming soon (hopefully) ###
 ```''')
 
@@ -220,6 +220,14 @@ async def on_message(message):
 <https://privacytools.io> -- **FOSS** and private alternatives to proprietary crap.
 <https://opensource.builders> -- Tool to find **FOSS** alternatives to proprietary software you might use.
 *Also allows you to specify the programming language and license.*''')
+    if msg == "os!distros":
+        await reply('''> **For begginers**
+**Zorin OS** -- Windows look-alike, very user friendly | <https://zorin.com/os>
+**Deepin -- macOS look-alike, also user friendly | <https://deepin.org/en>
+> **For advanced users**
+**Arch Linux** -- DIY Keep-it-simple distro with a huge repository | <archlinux.org>
+**KISS Linux** -- Very simple DIY metadistro, hard to install | <https://kisslinux.org>
+**Void Linux** -- A distro with the option to be completely GNUless | <https://voidlinux.org>''')
 
     if msg.startswith('os!sc') or msg.startswith('os!sourcecode') or msg.startswith('os!source-code') or msg.startswith('os!source') or msg.startswith('os!code'):
         await reply('shut up and here\'s my code: <https://github.com/SqdNoises/apu>')
