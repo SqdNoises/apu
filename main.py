@@ -224,7 +224,7 @@ async def on_message(message):
     if msg == "os!distros":
         await reply('''> **For begginers**
 **Zorin OS** -- Windows look-alike, very user friendly | <https://zorin.com/os>
-**Deepin -- macOS look-alike, also user friendly | <https://deepin.org/en>
+**Deepin** -- macOS look-alike, also user friendly | <https://deepin.org/en>
 > **For advanced users**
 **Arch Linux** -- DIY Keep-it-simple distro with a huge repository | <archlinux.org>
 **KISS Linux** -- Very simple DIY metadistro, hard to install | <https://kisslinux.org>
