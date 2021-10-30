@@ -205,6 +205,7 @@ async def on_message(message):
 "os!source" - Replies with the link to source code for APU Utils
 "os!aliases" - Replies with aliases to commands
 "os!distros" - Replies with a list of linux distros.
+
 ### More public commands cooming soon (hopefully) ###
 ```''')
 
