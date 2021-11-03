@@ -76,8 +76,11 @@ async def on_message(message):
     react = message.add_reaction
     i = -1
     
+    # sqd
+    sqd = 477683725673693184
     # admins
     admins = [840644782673100870, 842457844724400142, 884099213615587338, 477683725673693184]
+    #mods
     mods = [840644782673100870, 842457844724400142, 884099213615587338, 477683725673693184]
     
     # main
@@ -101,6 +104,18 @@ async def on_message(message):
                await sendmsg('You cannot use my messages in DMs!\n\nFun Fact:\n*There\'s a 1in 100 chance that you are seeing this message!')
            return
      
+    # sqd commands
+    if msg.startswith('os!die'):
+        if author.id == sqd:
+            if msg == 'os!die':
+                await reply('ok, you\'re dead. now what?')
+            elif msg.startswith('os!die '):
+                user = msg.split('os!die ', 1)[1]
+                await sendmsg(user + ', death.')
+        else:
+            await reply('special sqd-only command uwu')
+        return
+    
     # admin commands
     if msg == 'os!helpadmin' or msg == 'os!ha' or msg == 'os!admin':
         if author.id in admins:
@@ -197,6 +212,13 @@ async def on_message(message):
             await reply('<a:no:901803557014077480> **You are not whitelisted as a mod!**')
 
     # non-admin-mod
+    if msg == 'os!':
+        xl = ['???', 'i would love it if you provide a command', 'u srs?', 'bruh specify a command-', '...', '*crickets start chirping*', 'ok', 'ok, you\'ve summoned me. now what?', '_ _', 'do you have brain?', 'if you\'re looking for my commands, do `os!help` instead of summoning me and wasting my time.', 'shut']
+        n = len(xl) - 1
+        num = random.randint(0, n)
+        x = xl[num]
+        await reply(x)
+        
     if msg == 'os!help':
         await reply('''```py
 # Commands - Help - APU Utils
@@ -297,8 +319,11 @@ async def on_message(message):
     if client.user.mention in msg or cum2 in msg:
             if msg == cum or msg == cum2:
                 await reply('''```py
-Hi! I am APU Utils.
-# indev
+I am APU Utils, made by Sqd (/home/sqd).
+# Prefix: os!
+Coded on python using nextcord.
+
+Ran on linux using the python3 package.
 ```''')
             elif cum in msg or cum2 in msg:
                 if 'are you watching me' or 'are u watching me' or 'are you fucking watching me' or 'are u fucking watching me':
