@@ -1,22 +1,20 @@
-# APU Utils - nextcord bot
+# APU Utils - discord bot
 # Importing Packages
 print('Importing packages...')
-print('Importing nextcord (fork of nextcord.py)...')
-import nextcord
+print('Importing discord...')
+import discord
 print('Importing asyncio...')
 import asyncio
 print('Importing os...')
 import os
 print('Importing random...')
 import random
-print('Importing subprocess...')
-import subprocess
 print('Packages imported.')
-# Importing Functions
-print('Importing functions..')
+# Importing Modules
+print('Importing modules...')
 print('Importing environ (from environ.py)...')
 import environ
-print('Functions imported.')
+print('Modules imported.')
 
 # environ.token, os.getenv - setting and getting token
 environ.token()
@@ -24,9 +22,9 @@ print('Setting bot token from environmental variables...')
 never_gonna_give_you_up = os.getenv('TOKEN')
 print('Done.')
 
-# Nextcord Client
-print('Assigning `client` to `nextcord.Client()` with all intents...')
-client = nextcord.Client(intents=nextcord.Intents.all())
+# Discord Client
+print('Assigning `client` to `discord.Client()` with all intents...')
+client = discord.Client(intents=discord.Intents.all())
 print('Done.')
 
 # on_ready
@@ -41,7 +39,7 @@ async def on_ready():
     print('Logged in! (' + user + ')')
     print("")
     print("Setting Status...")
-    await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you."), status=discord.Status.idle)
     os.system("clear")
     print('Logged in! (' + user + ')')
     print("")
@@ -51,13 +49,13 @@ async def on_ready():
         await channel.send('**Reloaded!**')
         os.environ['reloadinfo'] = 'reloaded'
         print('Reloaded!')
-        await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you. Reloaded!"), status=nextcord.Status.idle)
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you. Reloaded!"), status=discord.Status.idle)
         await asyncio.sleep(5)
-        await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you."), status=discord.Status.idle)
     else:
-        await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you. Connected!"), status=nextcord.Status.idle)
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you. Connected!"), status=discord.Status.idle)
         await asyncio.sleep(5)
-        await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="you."), status=discord.Status.idle)
 
 # on_message
 @client.event
@@ -136,10 +134,11 @@ async def on_message(message):
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
 
+
     if msg == 'os!deadchat':
         if author.id in admins:
             await delete()
-            await sendmsg('Dead chat...', file=nextcord.File('files/media/dead-chat.mp4'))
+            await sendmsg('Dead chat...', file=discord.File('files/media/dead-chat.mp4'))
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
@@ -152,7 +151,7 @@ async def on_message(message):
             await react('<a:Animated_Checkmark:901803000861966346>')
             await reply('**Reloading...**')
             print('Reloading Bot...')
-            await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="nobody. Reloading!"), status=nextcord.Status.dnd)
+            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="nobody. Reloading!"), status=discord.Status.dnd)
             os.system('python3 main.py')
             os._exit(1)
         else:
@@ -164,7 +163,7 @@ async def on_message(message):
             await react('<a:Animated_Checkmark:901803000861966346>')
             await reply('**Killing my process...**')
             print('Process Killed.')
-            await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="nobody. Process killed."), status=nextcord.Status.dnd)
+            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="nobody. Process killed."), status=discord.Status.dnd)
             os._exit(1)
         else:
             await react('<a:no:901803557014077480>')
@@ -202,11 +201,11 @@ async def on_message(message):
 # Commands - Help - APU Utils
 # Prefix: os!
 "os!help" - Replies with a list of commands
-"os!aliases" - Replies with aliases to commands
 "os!fosslist" - Replies with some useful FOSS alternative lists
 "os!source" - Replies with the link to source code for APU Utils
+"os!aliases" - Replies with aliases to commands
 
-### More public commands cooming soon ###
+### More public commands cooming soon (hopefully) ###
 ```''')
 
     if msg == 'os!aliases':
@@ -287,7 +286,7 @@ async def on_message(message):
         await reply('uwu')
     
     if lowmsg == 'hack' or lowmsg == 'hacked':
-        await reply(file=nextcord.File('files/media/hacc.gif'))
+        await reply(file=discord.File('files/media/hacc.gif'))
      
     # "cum" stands for client user mention, please dont end me ;-;
     cum = client.user.mention
@@ -325,7 +324,7 @@ async def on_member_join(member):
     print(f'{member} joined')
     channel = await member.create_dm()
     try:
-        await channel.send('Hello ' + member.mention + '!\nWelcome to **Anti Proprietary Union**!\n__Here\'s what you should do to get started__:\n> Read the rules to avoid getting punished. (<#901519584102854687>)\n> Talk in <#901860174539677706> chat!\nHope you have fun in our server.\n**Server invite:** https://nextcord.gg/7bDvDnpUZC\n\n**#open-source-gang** ❤️')
+        await channel.send('Hello ' + member.mention + '!\nWelcome to **Anti Proprietary Union**!\n__Here\'s what you should do to get started__:\n> Read the rules to avoid getting punished. (<#901519584102854687>)\n> Talk in <#901860174539677706> chat!\nHope you have fun in our server.\n**Server invite:** https://discord.gg/7bDvDnpUZC\n\n**#open-source-gang** ❤️')
         print('dm greet sent to ' + f'{member}')
     except Exception as e:
         print('failed to dm greet ' + f'{member}')
