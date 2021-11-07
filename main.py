@@ -1,7 +1,7 @@
 # APU Utils - nextcord bot
 # Importing Packages
 print('Importing packages...')
-print('Importing nextcord (fork of nextcord.py)...')
+print('Importing nextcord (fork of discord.py)...')
 import nextcord
 print('Importing asyncio...')
 import asyncio
