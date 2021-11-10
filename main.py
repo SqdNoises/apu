@@ -235,9 +235,6 @@ async def on_message(message):
         if author.id in admins:
             print('os!test called.')
             try:
-                print('sleep for 180 secs (3 mins)')
-                time.sleep(180)
-                print('180 secs over time for testing reconnenct')
                 await react('<a:Animated_Checkmark:901803000861966346>')
                 await reply('Check my console!')
             except Exception as e:
