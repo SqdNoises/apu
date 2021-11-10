@@ -1,7 +1,7 @@
 # APU Utils - nextcord bot
 # Importing Packages
 print('Importing packages...')
-print('Importing nextcord (fork of nextcord.py)...')
+print('Importing nextcord (fork of discord.py)...')
 import nextcord
 print('Importing asyncio...')
 import asyncio
@@ -9,8 +9,12 @@ print('Importing os...')
 import os
 print('Importing random...')
 import random
-print('Importing subprocess...')
-import subprocess
+print('Importing getpass...')
+import getpass
+print('Importing socket...')
+import socket
+print('Importing time...')
+import time
 print('Packages imported.')
 # Importing Functions
 print('Importing functions..')
@@ -29,35 +33,56 @@ print('Assigning `client` to `nextcord.Client()` with all intents...')
 client = nextcord.Client(intents=nextcord.Intents.all())
 print('Done.')
 
+# Getting user and host
+print('Getting username and hostname and setting it in \'userHost\' variable...')
+u = getpass.getuser()
+H = socket.gethostname()
+userHost = u + '@' + H
+print('Done.')
+
+# Clearing the messy terminal
+os.system('clear')
+
 # on_ready
 @client.event
 async def on_ready():
+    rldsts = os.getenv('rldsts')
+    if rldsts == 'connection lost':
+        os.environ['`Re-connected (Re-connect after losing connection)`']
+    else:
+        os.environ['rldsts'] = '`Connected`'
     reloadinfo = os.getenv('reloadinfo')
     channel = os.getenv('channel')
     if channel != None:
         channel = client.get_channel(int(channel))
     user = str(client.user)
-    os.system('clear')
     print('Logged in! (' + user + ')')
+    print('Running on `' + userHost + '`!')
     print("")
     print("Setting Status...")
     await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
-    os.system("clear")
-    print('Logged in! (' + user + ')')
-    print("")
     print("Status Set.")
     print("")
     if reloadinfo == 'reloading':
         await channel.send('**Reloaded!**')
+        os.environ['rldsts'] = '`Reloaded`'
         os.environ['reloadinfo'] = 'reloaded'
         print('Reloaded!')
         await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you. Reloaded!"), status=nextcord.Status.idle)
         await asyncio.sleep(5)
         await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
     else:
-        await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you. Connected!"), status=nextcord.Status.idle)
-        await asyncio.sleep(5)
-        await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
+        if rldsts == 'connection lost':
+            await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you. Re-connected!"), status=nextcord.Status.idle)
+            await asyncio.sleep(5)
+            await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
+        else:
+            await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you. Connected!"), status=nextcord.Status.idle)
+            await asyncio.sleep(5)
+            await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
+    channel = client.get_channel(902785006173315072)
+    reloadstat = os.getenv('rldsts')
+    await channel.send(f'> **Connected to Discord!**\n**Running on**: {userHost}\n**Status**: {reloadstat}\n**Latency**: {round(client.latency * 1000)}ms')
 
 # on_message
 @client.event
@@ -75,6 +100,9 @@ async def on_message(message):
     edit = message.edit
     react = message.add_reaction
     i = -1
+    cum = client.user.mention
+    cumstr = str(client.user.mention)
+    cum2 = cum.replace('<@', '<@!')
     
     # sqd
     sqd = 477683725673693184
@@ -116,7 +144,23 @@ async def on_message(message):
             await reply('special sqd-only command uwu')
         return
     
+    if msg == 'os!clear':
+        if author.id == sqd:
+            await reply('**Clearing your *messy* console screen...**')
+            os.system('clear')
+            await sendmsg('**Cleared!**')
+        else:
+            await reply('special sqd-only command uwu')
+    
     # admin commands
+    if msg == 'os!admincheck':
+        if author.id in admins:
+            await react('<a:Animated_Checkmark:901803000861966346>')
+            await sendmsg('<a:Animated_Checkmark:901803000861966346> **You are whitelisted as an admin!**')
+        else:
+            await react('<a:no:901803557014077480>')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
+            
     if msg == 'os!helpadmin' or msg == 'os!ha' or msg == 'os!admin':
         if author.id in admins:
             try:
@@ -126,6 +170,9 @@ async def on_message(message):
 # Admin Commands - Admin Help - APU Utils
 # Prefix: os!
 "os!helpadmin" - Sends you a DM with the Admin Commands Page
+"os!helpmod" - Sends you a DM with the Mod Commands Page
+"os!help" - Replies with a list of Public Commands
+"os!admincheck" - Checks if you are whitelisted as an admin or not.
 
 # Fun
 "os!deadchat" - Sends a dead chat meme after deleting your message
@@ -134,6 +181,8 @@ async def on_message(message):
 "os!reload" - Reloads the bot's code
 "os!killprocess" - Kills the bot's process
 "os!test" - tests done by sqd
+"os!ping" - Checks the ping/latency of the bot
+"os!instance" - Shows `username@hostname` of the device the bot is running on
 ```
 ```py
 # Command Aliases - Admin Help - APU Utils
@@ -141,20 +190,13 @@ async def on_message(message):
 "os!helpadmin" - os!ha, os!admin
 "os!reload" - os!r
 "os!killprocess" - os!kp
+"os!ping" - os!latency
 ```''')
                 await react('<a:GreenCheck:901802575052025917>')
                 await reply('Check your DMs!')
             except Exception as e:
                 await react('<a:no:901803557014077480>')
                 await reply('Couldn\'t DM you! Please make sure to have your DMs enabled!\n**`Exception: `**`' + str(e) + '`')
-        else:
-            await react('<a:no:901803557014077480>')
-            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
-
-    if msg == 'os!deadchat':
-        if author.id in admins:
-            await delete()
-            await sendmsg('Dead chat...', file=nextcord.File('files/media/dead-chat.mp4'))
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
@@ -166,6 +208,8 @@ async def on_message(message):
             os.environ['channel'] = str(channel)
             await react('<a:Animated_Checkmark:901803000861966346>')
             await reply('**Reloading...**')
+            channel = client.get_channel(902785006173315072)
+            await channel.send(f'**os!reload** called by an admin ({str(author)}). Reloading the bot!')
             print('Reloading Bot...')
             await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="nobody. Reloading!"), status=nextcord.Status.dnd)
             os.system('python3 main.py')
@@ -178,6 +222,8 @@ async def on_message(message):
         if author.id in admins:
             await react('<a:Animated_Checkmark:901803000861966346>')
             await reply('**Killing my process...**')
+            channel = client.get_channel(902785006173315072)
+            await channel.send(f'**os!killprocess** called by an admin ({str(author)}). Killing the process!')
             print('Process Killed.')
             await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="nobody. Process killed."), status=nextcord.Status.dnd)
             os._exit(1)
@@ -189,27 +235,72 @@ async def on_message(message):
         if author.id in admins:
             print('os!test called.')
             try:
+                print('sleep for 180 secs (3 mins)')
+                time.sleep(180)
+                print('180 secs over time for testing reconnenct')
                 await react('<a:Animated_Checkmark:901803000861966346>')
                 await reply('Check my console!')
             except Exception as e:
                 await react('<a:no:901803557014077480>')
                 await reply('<a:no:901803557014077480> **`Exception: `**`' + str(e) + '`')
-
-    if msg == 'os!checkthepins' or msg == 'os!ctp':
-        if author.id in admins:
-            await delete()
-            await sendmsg('<a:ctp:901802005230661662>')
-        else:
-            await reply('**no.**')
-
+                
     # mod commands
-    if msg.startswith('os!modcheck'):
+    if msg == 'os!modcheck':
         if author.id in mods:
             await react('<a:Animated_Checkmark:901803000861966346>')
             await sendmsg('<a:Animated_Checkmark:901803000861966346> **You are whitelisted as a mod!**')
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as a mod!**')
+    
+    if msg == 'os!helpmod' or msg == 'os!hm' or msg == 'os!mod':
+        if author.id in mods:
+            try:
+                channel = await author.create_dm()
+                await channel.send('''Here are my commands and aliases for commands.
+```py
+# Mod Commands - Mod Help - APU Utils
+# Prefix: os!
+"os!helpmod" - Sends you a DM with the Mod Commands Page
+"os!help" - Replies with a list of Public Commands
+"os!modcheck" - Checks if you are whitelisted as a mod or not
+
+# Fun
+"os!deadchat" - Sends a dead chat meme after deleting your message
+
+# Bot Related
+"os!ping" - Checks the ping/latency of the bot
+"os!instance" - Shows `username@hostname` of the device the bot is running on
+```
+```py
+# Command Aliases - Mod Help - APU Utils
+# Prefix: os!
+"os!helpmod" - os!hm, os!mod
+"os!ping" - os!latency
+```''')
+                await react('<a:GreenCheck:901802575052025917>')
+                await reply('Check your DMs!')
+            except Exception as e:
+                await react('<a:no:901803557014077480>')
+                await reply('Couldn\'t DM you! Please make sure to have your DMs enabled!\n**`Exception: `**`' + str(e) + '`')
+        else:
+            await react('<a:no:901803557014077480>')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
+
+    if msg == 'os!deadchat':
+        if author.id in mods:
+            await delete()
+            await sendmsg('Dead chat...', file=nextcord.File('files/media/dead-chat.mp4'))
+        else:
+            await react('<a:no:901803557014077480>')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
+            
+    if msg == 'os!checkthepins' or msg == 'os!ctp':
+        if author.id in mods:
+            await delete()
+            await sendmsg('<a:ctp:901802005230661662>')
+        else:
+            await reply('**no.**')
 
     # non-admin-mod
     if msg == 'os!':
@@ -227,8 +318,8 @@ async def on_message(message):
 "os!aliases" - Replies with aliases to commands
 "os!fosslist" - Replies with some useful FOSS alternative lists
 "os!source" - Replies with the link to source code for APU Utils
-
-### More public commands cooming soon ###
+"os!instance" - Shows `username@hostname` of the device the bot is running on
+"os!ping" - Checks the ping/latency of the bot
 ```''')
 
     if msg == 'os!aliases':
@@ -236,7 +327,14 @@ async def on_message(message):
 # Aliases - APU Utils
 # Prefix: os!
 "os!source" - os!sourcecode, os!source-code, os!sc, os!code
+"os!ping" - os!latency
 ```''')
+
+    if msg == 'os!instance':
+        await reply(f'Currently running on **{userHost}**.')
+    
+    if msg == 'os!ping' or msg == 'os!latency':
+        await reply(f'<:bluegreen_network_bars:907868507927097405> **My ping:** {round(client.latency * 1000)}ms 🧽')
 
     if msg == 'os!fosslist':
         await reply('''> **Useful lists with FOSS alternatives and software:**
@@ -310,23 +408,19 @@ async def on_message(message):
     
     if lowmsg == 'hack' or lowmsg == 'hacked':
         await reply(file=nextcord.File('files/media/hacc.gif'))
-     
-    # "cum" stands for client user mention, please dont end me ;-;
-    cum = client.user.mention
-    cumstr = str(client.user.mention)
-    cum2 = cum.replace('<@', '<@!')
-
-    if client.user.mention in msg or cum2 in msg:
+    
+    if cum in msg or cum2 in msg:
             if msg == cum or msg == cum2:
-                await reply('''```py
+                await reply(f'''```py
 I am APU Utils, made by Sqd (/home/sqd).
 # Prefix: os!
 Coded on python using nextcord.
 
 Ran on linux using the python3 package.
+Currently running on `{userHost}`
 ```''')
             elif cum in msg or cum2 in msg:
-                if 'are you watching me' or 'are u watching me' or 'are you fucking watching me' or 'are u fucking watching me':
+                if 'are you watching me' in msg or 'are u watching me' in msg or 'are you fucking watching me' in msg or 'are u fucking watching me' in msg:
                     await reply('I\'m watching you.')
 
     if msg == '<@&903299738542161962>':
@@ -344,6 +438,10 @@ Ran on linux using the python3 package.
     if lowmsg.startswith('aaa') and lowmsg.endswith('aaapu utils'):
         await reply('No, it\'s **APU Utils**, not **' + msg + '** you dumbo head.')
 
+# on disconnect
+async def on_disconnect():
+    print(f'[{str(time.now)}] Lost Connection to Discord!')
+
 # on member join
 @client.event
 async def on_member_join(member):
@@ -360,8 +458,20 @@ async def on_member_join(member):
     n = len(greets) - 1
     num = random.randint(0, n)
     greet = greets[num]
-    await channel.send(f'{member.mention} ' + greet)
+    if member.bot == True:
+        await sendmsg(f'A bot was invited! ({member})')
+    else:
+        await channel.send(f'{member.mention} ' + greet)
     print('alerted the server for member join (' + f'{member})')
+    # log it
+    channel = client.get_channel(902785006173315072)
+    memcrt = member.created_at
+    memcrtstr = str(memcrt)
+    memjoin = member.joined_at
+    memjoinstr = str(memjoin)
+    membot = member.bot
+    membotstr = str(membot)
+    await channel.send(f'> **Member Joined,** ({member})\n**__{member.mention}__** joined.\n**ID**: {member.id}\n**Created at**: {memcrtstr}\n**Joined at**: {memjoinstr}\n**Bot**: {membotstr}')
 
 # on member leave
 @client.event
@@ -373,8 +483,36 @@ async def on_member_remove(member):
     n = len(byelist) - 1
     num = random.randint(0, n)
     bye = byelist[num]
-    await sendmsg(f'{member} ' + bye)
+    if member.bot == True:
+        await sendmsg(f'A bot was removed! ({member})')
+    else:
+        await sendmsg(f'{member} ' + bye)
     print('alerted the server for member leave (' + f'{member})')
+    # log it
+    channel = client.get_channel(902785006173315072)
+    memcrt = member.created_at
+    memcrtstr = str(memcrt)
+    memjoin = member.joined_at
+    memjoinstr = str(memjoin)
+    membot = member.bot
+    membotstr = str(membot)
+    memnick = member.nick
+    if memnick == None:
+        os.environ['memnick'] = '`No nickname`'
+    else:
+        os.environ['memnick'] = memnick
+    memnickstr = os.getenv('memnick')
+    await channel.send(f'> **Member Left,** ({member})\n**__{member.mention}__** left.\n**ID**: {member.id}\n**Server Nickname**: {memnickstr}\n**Created at**: {memcrtstr}\n**Joined at**: {memjoinstr}\n**Bot**: {membotstr}')
+
+# on message delete
+@client.event
+async def on_message_delete(message):
+    print(f'msg deleted,,, content-{message.content}')
+
+# on raw message delete
+@client.event
+async def on_raw_message_delete(payload):
+    print(f'raw msg deleted,,, content-{message.content}')
 
 # logging into APU Utils
 print("Logging into APU Utils...")
