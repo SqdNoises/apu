@@ -15,6 +15,8 @@ print('Importing socket...')
 import socket
 print('Importing time...')
 import time
+print('Importing json...')
+import json
 print('Packages imported.')
 # Importing Functions
 print('Importing functions..')
@@ -47,8 +49,11 @@ os.system('clear')
 @client.event
 async def on_ready():
     rldsts = os.getenv('rldsts')
+    logchannel = client.get_channel(902785006173315072)
     if rldsts == 'connection lost':
         os.environ['`Re-connected (Re-connect after losing connection)`']
+        reloadstat = os.getenv('rldsts')
+        await logchannel.send(f'> **Connected to Discord!**\n**Running on**: {userHost}\n**Status**: {reloadstat}\n**Latency**: {round(client.latency * 1000)}ms')
     else:
         os.environ['rldsts'] = '`Connected`'
     reloadinfo = os.getenv('reloadinfo')
@@ -68,6 +73,8 @@ async def on_ready():
         os.environ['rldsts'] = '`Reloaded`'
         os.environ['reloadinfo'] = 'reloaded'
         print('Reloaded!')
+        reloadstat = os.getenv('rldsts')
+        await logchannel.send(f'> **Connected to Discord!**\n**Running on**: {userHost}\n**Status**: {reloadstat}\n**Latency**: {round(client.latency * 1000)}ms')
         await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you. Reloaded!"), status=nextcord.Status.idle)
         await asyncio.sleep(5)
         await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
@@ -77,12 +84,11 @@ async def on_ready():
             await asyncio.sleep(5)
             await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
         else:
+            reloadstat = os.getenv('rldsts')
+            await logchannel.send(f'> **Connected to Discord!**\n**Running on**: {userHost}\n**Status**: {reloadstat}\n**Latency**: {round(client.latency * 1000)}ms')
             await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you. Connected!"), status=nextcord.Status.idle)
             await asyncio.sleep(5)
             await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="you."), status=nextcord.Status.idle)
-    channel = client.get_channel(902785006173315072)
-    reloadstat = os.getenv('rldsts')
-    await channel.send(f'> **Connected to Discord!**\n**Running on**: {userHost}\n**Status**: {reloadstat}\n**Latency**: {round(client.latency * 1000)}ms')
 
 # on_message
 @client.event
@@ -174,6 +180,9 @@ async def on_message(message):
 "os!help" - Replies with a list of Public Commands
 "os!admincheck" - Checks if you are whitelisted as an admin or not.
 
+# Moderation
+"os!userinfo <id>" (where <id> is the member id) - Replies with the info of the member id mentioned
+
 # Fun
 "os!deadchat" - Sends a dead chat meme after deleting your message
 
@@ -262,6 +271,9 @@ async def on_message(message):
 "os!help" - Replies with a list of Public Commands
 "os!modcheck" - Checks if you are whitelisted as a mod or not
 
+# Moderation
+"os!userinfo <id>" (where <id> is the member id) - Replies with the info of the member id mentioned
+
 # Fun
 "os!deadchat" - Sends a dead chat meme after deleting your message
 
@@ -280,6 +292,28 @@ async def on_message(message):
             except Exception as e:
                 await react('<a:no:901803557014077480>')
                 await reply('Couldn\'t DM you! Please make sure to have your DMs enabled!\n**`Exception: `**`' + str(e) + '`')
+        else:
+            await react('<a:no:901803557014077480>')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
+    
+    if msg.startswith('os!userinfo'):
+        if author.id in mods:
+            if msg.startswith('os!userinfo '):
+                memid = str(msg.split('os!userinfo ', 1)[1])
+                try:
+                    member = author.guild.get_member(int(memid))
+                    await reply(f'''> **User info**
+**Member**: `{member}`
+**Member ID**: {member.id}
+**Member Nickname**: `{member.nick}` *(value* `None` *could mean that the user has no nickname)*
+**Created at**: {member.created_at} *(Time is in UTC)*
+**Joined at**: {member.joined_at} *(Time is in UTC)*
+**Bot**: {member.bot}
+*Requested by {author.mention}*''')
+                except Exception as e:
+                    await reply(f'**An error occured!**\nusage: `os!userinfo <id>`, where `<id>` is the user id of the member.\n\n**``Exception:``**` {e}`')
+            else:
+                await reply('usage: `os!userinfo <id>`, where `<id>` is the user id of the member.')
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
@@ -501,15 +535,143 @@ async def on_member_remove(member):
     memnickstr = os.getenv('memnick')
     await channel.send(f'> **Member Left,** ({member})\n**__{member.mention}__** left.\n**ID**: {member.id}\n**Server Nickname**: {memnickstr}\n**Created at**: {memcrtstr}\n**Joined at**: {memjoinstr}\n**Bot**: {membotstr}')
 
-# on message delete
-@client.event
-async def on_message_delete(message):
-    print(f'msg deleted,,, content-{message.content}')
-
 # on raw message delete
 @client.event
 async def on_raw_message_delete(payload):
-    print(f'raw msg deleted,,, content-{message.content}')
+    if payload.channel_id == 902785006173315072:
+        return
+    if payload.cached_message == None:
+        logchannel = client.get_channel(902785006173315072)
+        channel = client.get_channel(payload.channel_id)
+        await logchannel.send(f'''> **Message Deleted**
+**Message ID**: {payload.message_id}
+**Channel**: #{channel.name} (<#{channel.id}>)
+**Channel ID**: {channel.id}
+**Cached**: False
+» Cache details:
+   • No details found, `NOT_CACHED`''')
+    else:
+        message = payload.cached_message
+        logchannel = client.get_channel(902785006173315072)
+        channel = client.get_channel(message.channel.id)
+        try:
+            os.environ['num'] = '0'
+            os.environ['a1'] = '`None`'
+            os.environ['a2'] = '`None`'
+            os.environ['a3'] = '`None`'
+            os.environ['a4'] = '`None`'
+            os.environ['a5'] = '`None`'
+            os.environ['a6'] = '`None`'
+            os.environ['a7'] = '`None`'
+            os.environ['a8'] = '`None`'
+            os.environ['a9'] = '`None`'
+            os.environ['a10'] = '`None`'
+            for attachment in message.attachments:
+                num = os.getenv('num')
+                if num == None:
+                    os.environ['num'] = '0'
+                num = os.getenv('num')
+                num = int(num) + 1
+                A = 'a' + str(num)
+                os.environ[A] = '<' + str(attachment.url) + '>'
+                os.environ['num'] = str(num)
+            a1 = os.getenv('a1')
+            a2 = os.getenv('a2')
+            a3 = os.getenv('a3')
+            a4 = os.getenv('a4')
+            a5 = os.getenv('a5')
+            a6 = os.getenv('a6')
+            a7 = os.getenv('a7')
+            a8 = os.getenv('a8')
+            a9 = os.getenv('a9')
+            a10 = os.getenv('a10')
+            await logchannel.send(f'''> **Message Deleted**
+**Message ID**: {message.id}
+**Channel**: #{channel.name} (<#{channel.id}>)
+**Channel ID**: {channel.id}
+**Cached**: True
+» Cache details:
+**Message content**:
+`-----o-----`
+{message.content}
+`-----x-----`
+**Attachments**:
+  - **A¹**: {a1}
+  - **A²**: {a2}
+  - **A³**: {a3}
+  - **A⁴**: {a4}
+  - **A⁵**: {a5}
+  - **A⁶**: {a6}
+  - **A⁷**: {a7}
+  - **A⁸**: {a8}
+  - **A⁹**: {a9}
+  - **A¹⁰**: {a10}
+**Message author**: {message.author} ({message.author.mention})
+**Message author ID**: {message.author.id}''')
+        except Exception as e:
+            os.environ['num'] = '0'
+            os.environ['a1'] = '`None`'
+            os.environ['a2'] = '`None`'
+            os.environ['a3'] = '`None`'
+            os.environ['a4'] = '`None`'
+            os.environ['a5'] = '`None`'
+            os.environ['a6'] = '`None`'
+            os.environ['a7'] = '`None`'
+            os.environ['a8'] = '`None`'
+            os.environ['a9'] = '`None`'
+            os.environ['a10'] = '`None`'
+            for attachment in message.attachments:
+                num = os.getenv('num')
+                num = int(num) + 1
+                A = 'a' + str(num)
+                os.environ[A] = '<' + str(attachment.url) + '>'
+                os.environ['num'] = str(num)
+            a1 = os.getenv('a1')
+            a2 = os.getenv('a2')
+            a3 = os.getenv('a3')
+            a4 = os.getenv('a4')
+            a5 = os.getenv('a5')
+            a6 = os.getenv('a6')
+            a7 = os.getenv('a7')
+            a8 = os.getenv('a8')
+            a9 = os.getenv('a9')
+            a10 = os.getenv('a10')
+            await logchannel.send(f'''> **Message Deleted**
+**Message ID**: {message.id}
+**Channel**: #{channel.name} (<#{channel.id}>)
+**Channel ID**: {channel.name}
+**Cached**: True
+» Cache details:
+**Message content**: *Refer to the message below* (**`Exception:`**` {e}`)
+**Attachments**:
+  - **A¹**: {a1}
+  - **A²**: {a2}
+  - **A³**: {a3}
+  - **A⁴**: {a4}
+  - **A⁵**: {a5}
+  - **A⁶**: {a6}
+  - **A⁷**: {a7}
+  - **A⁸**: {a8}
+  - **A⁹**: {a9}
+  - **A¹⁰**: {a10}
+**Message author**: {message.author} ({message.author.mention})
+**Message author ID**: {message.author.id}''')
+            await logchannel.send(f'{message.content}')
+
+# on message edit
+@client.event
+async def on_message_edit(before, after):
+    return
+    #print(f'\n\nB E F O R E :   {before}\n')
+    #print(f'\n\nA F T E R :   {after}\n')
+    pass
+
+# on raw message edit
+@client.event
+async def on_raw_message_edit(payload):
+    return
+    print(f'\n\nP A Y L O A D :   {payload}\n')
+    json_payloaddata = json.loads(str(payload.data))
 
 # logging into APU Utils
 print("Logging into APU Utils...")

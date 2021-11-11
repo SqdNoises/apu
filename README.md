@@ -4,11 +4,6 @@ Join the **Anti Proprietary Union** [here](https://discord.gg/7bDvDnpUZC)
 
 This bot was coded in python using nextcord.
 
+*Also, coded on an Android.*
+
 ### \#open-source-gang ❤️
-
-# Timeline
-
-(All times are in IST)
-
-\--- 3rd November, 2021
-- Switched to nextcord from discord.py
