@@ -226,7 +226,7 @@ async def on_message(message):
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
-    
+            
     if msg == 'os!killprocess' or msg =='os!kp':
         if author.id in admins:
             await react('<a:Animated_Checkmark:901803000861966346>')
@@ -272,6 +272,36 @@ async def on_message(message):
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
+    
+    if msg.startswith('os!ratio'):
+        if author.id in admins:
+            if msg == 'os!ratio':
+                await delete()
+                await sendmsg('ratio')
+            if msg.startswith('os!ratio '):
+                msg = msg.split('os!ratio ', 1)[1]
+                idlist = msg.split(' ', 1)
+                messageid = message.id
+                if len(idlist) == 1:
+                    try:
+                        msgid = int(idlist[0])
+                        message = await message.channel.fetch_message(msgid)
+                        await message.reply('ratio')
+                        message = await message.channel.fetch_message(messageid)
+                        await message.delete()
+                    except Exception as e:
+                        await sendmsg(f'**`Exception:`**` {e}`\n**Usage**: `os!ratio <message id> [channel id]` where `<message id>` is the message id and `[channel id]` (optional) is the channel id of the message.')
+                if len(idlist) == 2:
+                    try:
+                        msgid = int(idlist[0])
+                        channelid = int(idlist[1])
+                        channel = client.get_channel(channelid)
+                        message = await channel.fetch_message(msgid)
+                        await message.reply('ratio')
+                    except:
+                        await sendmsg(f'**`Exception:`**` {e}`\n**Usage**: `os!ratio <message id> [channel id]` where `<message id>` is the message id and `[channel id]` (optional) is the channel id of the message.')
+        else:
+            await reply('look, no one cares.')
             
     if msg == 'os!test':
         if author.id in admins:
@@ -616,7 +646,7 @@ async def on_member_join(member):
     print(f'{member} joined')
     channel = await member.create_dm()
     try:
-        await channel.send('Hello ' + member.mention + '!\nWelcome to **Anti Proprietary Union**!\n__Here\'s what you should do to get started__:\n> Read the rules to avoid getting punished. (<#901519584102854687>)\n> Talk in <#901860174539677706> chat!\nHope you have fun in our server.\n**Server invite:** https://nextcord.gg/7bDvDnpUZC\n\n**#open-source-gang** ❤️')
+        await channel.send('Hello ' + member.mention + '!\nWelcome to **Anti Proprietary Union**!\n__Here\'s what you should do to get started__:\n> Read the rules to avoid getting punished. (<#901519584102854687>)\n> Talk in <#901860174539677706> chat!\nHope you have fun in our server.\n**Server invite:** https://discord.gg/7bDvDnpUZC\n\n**#open-source-gang** ❤️')
         print('dm greet sent to ' + f'{member}')
     except Exception as e:
         print('failed to dm greet ' + f'{member}')
