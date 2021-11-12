@@ -256,8 +256,6 @@ async def on_message(message):
                     await reply(f'**Successfully proprieraried {member.mention}\'s nickname.**')
                 except Exception as e:
                     await reply(f'usage: `os!proprietary <id>` where `<id>` is the user id of the member\n**`Exception:`**` {e}`')
-            else:
-                await reply('id pls')
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
@@ -266,6 +264,9 @@ async def on_message(message):
         if author.id in admins:
             print('os!test called.')
             try:
+                stringmy = 'nonono'
+                test = stringmy.split()
+                await sendmsg(test)
                 await react('<a:Animated_Checkmark:901803000861966346>')
                 await reply('Check my console!')
             except Exception as e:
@@ -352,32 +353,72 @@ async def on_message(message):
                 await reply('That rule number doesn\'t exist...')
     
     if msg.startswith('os!modnick'):
-        if msg.startswith('os!modnick '):
-            memid = msg.split('os!modnick ', 1)[1]
-            try:
-                await delete()
-                member = author.guild.get_member(int(memid))
-                def modnickrnum():
-                    rnum = random.randint(0, 9999999)
-                    modnick = 'moderated nickname ' + str(rnum)
-                    for member in message.guild.members:
-                        if modnick == member.nick:
-                            modnickrnum()
-                    os.environ['modnick'] = modnick
-                modnickrnum()
-                modnick = os.getenv('modnick')
-                await member.edit(nick=modnick)
-                await sendmsg(f'> **Moderated the nickname to `{modnick}`.**')
-                # log it
-                channel = client.get_channel(902785006173315072)
-                await channel.send(f'''> **Nickname Moderated**
+        if author.id in mods:
+            if msg.startswith('os!modnick '):
+                memid = msg.split('os!modnick ', 1)[1]
+                try:
+                    await delete()
+                    member = author.guild.get_member(int(memid))
+                    def modnickrnum():
+                        rnum = random.randint(0, 9999999)
+                        modnick = 'moderated nickname ' + str(rnum)
+                        for member in message.guild.members:
+                            if modnick == member.nick:
+                                modnickrnum()
+                        os.environ['modnick'] = modnick
+                    modnickrnum()
+                    modnick = os.getenv('modnick')
+                    await member.edit(nick=modnick)
+                    await sendmsg(f'> **Moderated the nickname to `{modnick}`.**')
+                    # log it
+                    channel = client.get_channel(902785006173315072)
+                    await channel.send(f'''> **Nickname Moderated**
 **Nickname moderated by**: `{author}` ({author.id})
 **Nickname moderated for**: `{member}` ({member.id})
 **Nickname moderated to**: {modnick}''')
-            except Exception as e:
-                await sendmsg(f'**``Exception:``**` {e}`')
+                except Exception as e:
+                    await sendmsg(f'**``Exception:``**` {e}`')
+            else:
+                await reply('Specify a user id you dumb dumb dumbo head.')
         else:
-            await reply('Specify a user id you dumb dumb dumbo head.')
+            await react('<a:no:901803557014077480>')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as a mod!**')
+            
+    if msg.startswith('os!nick'):
+        if author.id in mods:
+            if msg.startswith('os!nick '):
+                 memidnick = msg.split('os!nick ', 1)[1]
+                 memlist = memidnick.split(' ', 1)
+                 try:
+                     memid = int(memlist[0])
+                     member = author.guild.get_member(memid)
+                     if len(memlist) == 1:
+                         await member.edit(nick=None)
+                         await reply('**Set the member\'s server nickname back to default.**')
+                         # log it
+                         channel = client.get_channel(902785006173315072)
+                         await channel.send(f'''> **Nickname Changed** *(through `os!nick` command)*
+**Nickname changed by**: `{author}` ({author.id})
+**Nickname changed for**: `{member}` ({member.id})
+**Nickname changed to**: `{member.name}` (Default Nickname)''')
+                     if len(memlist) == 2:
+                         memnick = memlist[1]
+                         await member.edit(nick=memnick)
+                         await reply(f'**Set the member\'s server nickname to `{memnick}`.**')
+                         # log it
+                         channel = client.get_channel(902785006173315072)
+                         await channel.send(f'''> **Nickname Changed** *(through `os!nick` command)*
+**Nickname changed by**: `{author}` ({author.id})
+**Nickname changed for**: `{member}` ({member.id})
+**Nickname changed to**: `{memnick}`''')
+                 except Exception as e:
+                      await reply(f'**`Exception:`**` {e}`')
+            else:
+                  await reply('Specify a user id you dumb dumb dumbo head.')
+        else:
+             await react('<a:no:901803557014077480>')
+             await reply('<a:no:901803557014077480> **You are not whitelisted as a mod!**')
+                 
 
     if msg == 'os!deadchat':
         if author.id in mods:
@@ -385,7 +426,7 @@ async def on_message(message):
             await sendmsg('Dead chat...', file=nextcord.File('files/media/dead-chat.mp4'))
         else:
             await react('<a:no:901803557014077480>')
-            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as a mod!**')
             
     if msg == 'os!checkthepins' or msg == 'os!ctp':
         if author.id in mods:
