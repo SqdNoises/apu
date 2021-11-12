@@ -226,7 +226,7 @@ async def on_message(message):
         else:
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
-            
+    
     if msg == 'os!killprocess' or msg =='os!kp':
         if author.id in admins:
             await react('<a:Animated_Checkmark:901803000861966346>')
@@ -247,7 +247,6 @@ async def on_message(message):
             channel = client.get_channel(902785006173315072)
             await channel.send(f'**os!clientclose** called by an admin ({str(author)}). `client.close()`ing!')
             print('Client Closed.')
-            await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="nobody. Client Closed."), status=nextcord.Status.dnd)
             await client.close()
         else:
             await react('<a:no:901803557014077480>')
