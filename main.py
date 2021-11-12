@@ -240,6 +240,19 @@ async def on_message(message):
             await react('<a:no:901803557014077480>')
             await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
     
+    if msg == 'os!clientclose' or msg =='os!cc':
+        if author.id in admins:
+            await react('<a:Animated_Checkmark:901803000861966346>')
+            await reply('**`client.close()`ing...**')
+            channel = client.get_channel(902785006173315072)
+            await channel.send(f'**os!clientclose** called by an admin ({str(author)}). `client.close()`ing!')
+            print('Client Closed.')
+            await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name="nobody. Client Closed."), status=nextcord.Status.dnd)
+            await client.close()
+        else:
+            await react('<a:no:901803557014077480>')
+            await reply('<a:no:901803557014077480> **You are not whitelisted as an admin!**')
+    
     if msg.startswith('os!proprietary') or msg.startswith('os!p'):
         if author.id in admins:
             if msg.startswith('os!proprietary ') or msg.startswith('os!p '):
@@ -264,9 +277,9 @@ async def on_message(message):
         if author.id in admins:
             print('os!test called.')
             try:
-                stringmy = 'nonono'
-                test = stringmy.split()
-                await sendmsg(test)
+                # test here
+                
+                ########
                 await react('<a:Animated_Checkmark:901803000861966346>')
                 await reply('Check my console!')
             except Exception as e:
