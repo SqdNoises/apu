@@ -775,7 +775,7 @@ Prefix: {prefix}
                     await delete()
                 except:
                     await reply('That rule number doesn\'t exist...')
-        else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply('**{no} You do not have permission to use this command!**')
         # rules
         elif msg == 'rules':
             if author.id in admins or author.id == sqd:

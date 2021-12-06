@@ -1,1 +1,4 @@
 nextcord
+pytz
+psutil
+requests
