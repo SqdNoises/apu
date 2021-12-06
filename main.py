@@ -648,7 +648,7 @@ Prefix: {prefix}
 ''', inline=False)
             emb.add_field(name='Utilities', value=f'''
 **`{p}userinfo <member>`** - Replies with the info of the member mentioned/id specified
-**`{p}avatar`** - Replies with the mentioned user's avatar'
+**`{p}avatar`** - Replies with the mentioned user's avatar
 **`{p}timer <number of seconds> [optional: timer name]`** - A timer command that sets a timer for the specified amount of time then ping you!
 ''', inline=False)
             emb.add_field(name='Useful', value =f'''
@@ -751,7 +751,7 @@ Prefix: {prefix}
             await reply(embed=emb)
         # checkthepins
         elif msg == 'checkthepins' or msg == 'ctp':
-            if author.id in admins:
+            if author.id in admins or author.id == sqd:
                 await delete()
                 await sendmsg('<a:ctp:901802005230661662>')
             else: await reply('**No.**')
@@ -775,7 +775,7 @@ Prefix: {prefix}
                     await delete()
                 except:
                     await reply('That rule number doesn\'t exist...')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # rules
         elif msg == 'rules':
             if author.id in admins or author.id == sqd:
@@ -795,7 +795,7 @@ Prefix: {prefix}
 **11)** No disagreeing with `{p.name}`.
 
 *Not following these rules will result in a mute, warn or ban depending on the severity of the rule you break and which rule you broke.*''')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # meme
         elif msg == 'meme':
             embmeme = await sendmsg('**Fetching Post...**')
@@ -888,7 +888,7 @@ Usage: {p}reddit <subreddit>
 **Old:** {prefix}
 **New:** {newprefix}''')
                         else: await reply('**New prefix please?**')
-                    else: await reply('**{no} You do not have permission to use this command!**')
+                    else: await reply(f'**{no} You do not have permission to use this command!**')
                 else: await reply(f'**Command `{msg}` not found!**')
         # reload
         elif msg == 'reload' or msg == 'r':
@@ -903,7 +903,7 @@ Usage: {p}reddit <subreddit>
                print(f'\n{time} Reloading Bot...\n')
                os.system('python3 main.py')
                os._exit(1)
-             else: await reply('**{no} You do not have permission to use this command!**')
+             else: await reply(f'**{no} You do not have permission to use this command!**')
         # killprocess
         elif msg == 'killprocess' or msg == 'kp':
             if author.id == sqd or author.id in admins:
@@ -913,7 +913,7 @@ Usage: {p}reddit <subreddit>
                 time = timenow()
                 print(f'\n{time} Process Killed.\n')
                 os._exit(1)
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # clientclose
         elif msg == 'clientclose' or msg == 'cc':
             if author.id == sqd or author.id in admins:
@@ -923,7 +923,7 @@ Usage: {p}reddit <subreddit>
                 time = timenow()
                 print('\n{time} `client.close()`ed.')
                 await client.close()
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # status <command> [input]
         elif msg.startswith('status'):
             if author.id == goffy or author.id == sqd:
@@ -1111,7 +1111,7 @@ Usage:
 
 Please note: I, a bot, cannot go invisible.
 ```''')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # instance
         elif msg == 'instance' or msg == 'i':
             time = timenow(debug=False)
@@ -1191,11 +1191,11 @@ Please note: I, a bot, cannot go invisible.
                             await logchannel.send(f'> **Member Muted** ({str(member)} *using the {p}warn command*\n**Warned:** {str(member)}**Warned by:** `{str(author)}`\n**Warned for:** `{reason}`')
                     except Exception as e: await reply(f'Got an error, have you pinged a person or given their ID?\n**`Exception:`**` {e}`')
                 else: await reply(f'**Command `{p}{msg}` not found!**')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # kick
         elif msg.startswith('kick'):
             if author.id in admins or author.id == sqd: await reply('Coming soon...')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # mute
         elif msg.startswith('mute'):
             if author.id in admins or author.id == sqd:
@@ -1230,11 +1230,11 @@ Please note: I, a bot, cannot go invisible.
                         await logchannel.send(f'> **Member Muted** ({str(member)} *using the {p}mute command*\n**Muted by:** `{str(member)}`')
                     except Exception as e: await reply(f'Got an error, have you pinged a person or given their ID?\n**`Exception:`**` {e}`')
                 else: await reply('Who do you want me to mute?')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # ban
         elif msg.startswith('ban'):
             if author.id in admins or author.id == sqd: await reply('Coming soon...')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # unmute
         elif msg.startswith('unmute'):
             if author.id in admins or author.id == sqd:
@@ -1259,11 +1259,11 @@ Please note: I, a bot, cannot go invisible.
                         elif nick == 'None': await reply(f'**Unmuted `{member.name}`!**')
                     except Exception as e: await reply(f'Got an error, have you pinged a person or given their ID?\n**`Exception:`**` {e}`')
                  else: await reply('Who do you want me to unmute?')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # unban
         elif msg.startswith('unban'):
             if author.id in admins or author.id == sqd: await reply('Coming soon...')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # modnick
         elif msg.startswith('modnick'):
             if author.id in admins or author.id == sqd:
@@ -1289,7 +1289,7 @@ Please note: I, a bot, cannot go invisible.
 **Nickname moderated to**: {modnick}''')
                     except Exception as e: await sendmsg(f'**``Exception:``**` {e}`')
                 else: await reply('Please specify a user id!')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # nick
         elif msg.startswith('nick'):
             if author.id in admins or author.id == sqd:
@@ -1321,7 +1321,7 @@ Please note: I, a bot, cannot go invisible.
 **Nickname changed to**: ```{memnick}```''')
                     except Exception as e:await reply(f'**`Exception:`**` {e}`')
                 else: await reply('Please mention or specify a user id!')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # slowmode
         elif msg.startswith('slowmode'):
             if author.id in admins or author.id == sqd:
@@ -1333,17 +1333,17 @@ Please note: I, a bot, cannot go invisible.
                         await reply(f'**Slowmode is now set to `{num}`.**')
                     except Exception as e: await reply(f'**An error occured!**\n**`Exception:`**` {e}`')
                 else: await reply(f'**Current slowmode is `{channel.slowmode_delay}`.**')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # commands
         elif msg == 'commands': await reply(f'Are you looking for my commands? If yes, please type `{p}help` for a list of my commands!')
         # send
         elif msg.startswith('send'):
             if author.id in admins or author.id == sqd: await reply('Coming soon...')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # dmsend
         elif msg.startswith('dmsend'):
             if author.id in admins or author.id == sqd: await reply('Coming soon...')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # say
         elif msg.startswith('say'):
             if msg.startswith('say '):
@@ -1363,7 +1363,7 @@ Please note: I, a bot, cannot go invisible.
                     saysend = f'{say} ** _ _ **'
                     await sendmsg(saysend)
                 else: await reply('What do you want me to say?')
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # userinfo
         elif msg.startswith('userinfo'):
             if msg.startswith('userinfo '):
@@ -1467,7 +1467,7 @@ Please note: I, a bot, cannot go invisible.
         elif msg.startswith('clear'):
             if author.id == sqd or author.id in admins: pass
             else:
-                await reply('**{no} You do not have permission to use this command!**')
+                await reply(f'**{no} You do not have permission to use this command!**')
                 return
             try:
                 deleted = await message.channel.purge(limit=100, check=is_me)
@@ -1479,7 +1479,7 @@ Please note: I, a bot, cannot go invisible.
         elif msg.startswith('purge'):
             if author.id == sqd or author.id in admins: pass
             else:
-                await reply('**{no} You do not have permission to use this command!**')
+                await reply(f'**{no} You do not have permission to use this command!**')
                 return
             if msg.startswith('purge '):
                 try: num = int(msg.split('purge ', 1)[1])
@@ -1538,7 +1538,7 @@ Please note: I, a bot, cannot go invisible.
         elif msg.startswith('announce'):
             if author.id == sqd or author.id in admins: pass
             else:
-                await reply('**{no} You do not have permission to use this command!**')
+                await reply(f'**{no} You do not have permission to use this command!**')
                 return
             if msg.startswith('announce '):
                 ancon = msg.split('announce ', 1)[1]
@@ -1553,20 +1553,20 @@ Please note: I, a bot, cannot go invisible.
 → {p}announce <what to announce>
   - Where <what to announce> is what is going to be announced. (COULD BE USED WITH MORE LINES)
 ```''')
-        # announce
+        # apuannounce
         elif msg.startswith('apuannounce'):
             if author.id == sqd or author.id in admins: pass
             else:
-                await reply('**{no} You do not have permission to use this command!**')
+                await reply(f'**{no} You do not have permission to use this command!**')
                 return
             if msg.startswith('apuannounce '):
                 ancon = msg.split('apuannounce ', 1)[1]
-                anchan = client.get_channel(901401261860085790)
+                anchan = client.get_channel(907983368635953162)
                 try: await anchan.send(f'{ancon}\n - *Announced by {author.mention}*')
                 except Exception as e:
                     await reply('**`Exception:`**` {e}`')
                     return
-                await reply('Announced! Check <#901401261860085790>!')
+                await reply('Announced! Check <#907983368635953162>!')
             elif msg == 'apuannounce': await reply(f'''```
 * Usage:
 → {p}apuannounce <what to announce>
@@ -1742,7 +1742,7 @@ Please note: I, a bot, cannot go invisible.
                 person = msg.split('simprate ', 1)[1]
                 lowperson = person.lower()
                 if str(client.user.id) in person or 'APU Utils' in lowperson:
-                    emb = nextcord.Embed(description=f'I am 0% simp.', color=dark_red)
+                    emb = nextcord.Embed(description=f'I am 0% simp.', color=green)
                     emb.set_author(name=f'simp r8 machine')
                     emb.set_footer(text=f'APU Utils | Made by {sqdname}', icon_url=client.user.avatar.url)
                     await reply(embed=emb)
@@ -1774,7 +1774,7 @@ Please note: I, a bot, cannot go invisible.
                 person = msg.split('gayrate ', 1)[1]
                 lowperson = person.lower()
                 if str(client.user.id) in person or 'APU Utils' in lowperson:
-                    emb = nextcord.Embed(description=f'I am 0% gay 🏳️‍🌈.', color=dark_red)
+                    emb = nextcord.Embed(description=f'I am 0% gay 🏳️‍🌈.', color=green)
                     emb.set_author(name=f'gay r8 machine')
                     emb.set_footer(text=f'APU Utils | Made by {sqdname}', icon_url=client.user.avatar.url)
                     await reply(embed=emb)
@@ -1799,10 +1799,10 @@ Please note: I, a bot, cannot go invisible.
                 await random.rsndint()
                 await e
                 await cmon_crash
-            else: await reply('**{no} You do not have permission to use this command!**')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # proprietary
         elif msg.startswith('proprietary') or msg.startswith('p'):
-            if author.id in admins:
+            if author.id in admins or author.id == sqd:
                 if msg.startswith('proprietary ') or msg.startswith('p '):
                     if msg.startswith('proprietary '):
                         msg = msg.split('proprietary ', 1)[1]
@@ -1816,17 +1816,19 @@ Please note: I, a bot, cannot go invisible.
                         member = author.guild.get_member(int(id))
                         await member.edit(nick='proprieraryuser')
                         await reply(f'**Successfully proprieraried {member.mention}\'s nickname.**')
+                        return
                     except Exception as e:
                         await reply(f'usage: `{p}proprietary <member>`\n**`Exception:`**` {e}`')
+                        return
             else:
-                await reply('**{no} You do not have permission to use this command!**')
+                await reply(f'**{no} You do not have permission to use this command!**')
         # fosslist
-        elif msg == 'os!fosslist': await reply('''> **Useful lists with FOSS alternatives and software:**
+        elif msg == 'fosslist': await reply('''> **Useful lists with FOSS alternatives and software:**
 <https://privacytools.io> -- **FOSS** and private alternatives to proprietary crap.
 <https://opensource.builders> -- Tool to find **FOSS** alternatives to proprietary software you might use.
 *Also allows you to specify the programming language and license.*''')
         # sourcecode
-        elif msg.startswith('os!sc') or msg.startswith('os!sourcecode') or msg.startswith('os!source-code') or msg.startswith('os!source') or msg.startswith('os!code'): await reply('shut up and here\'s my code: <https://github.com/SqdNoises/apu>')
+        elif msg == 'sc' or msg == 'sourcecode' or msg == 'source-code' or msg == 'source' or msg == 'code': await reply('shut up and here\'s my code: <https://github.com/SqdNoises/apu>')
         ### TYPE COMMANDS ABOVE THIS LINE ###
         else: await reply(f'**Command `{p}{msg}` not found!**')
     
