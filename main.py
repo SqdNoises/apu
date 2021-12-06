@@ -1802,26 +1802,23 @@ Please note: I, a bot, cannot go invisible.
             else: await reply(f'**{no} You do not have permission to use this command!**')
         # proprietary
         elif msg.startswith('proprietary') or msg.startswith('p'):
-            if author.id in admins or author.id == sqd:
-                if msg.startswith('proprietary ') or msg.startswith('p '):
-                    if msg.startswith('proprietary '):
-                        msg = msg.split('proprietary ', 1)[1]
-                        os.environ['msg'] = msg
-                    if msg.startswith('p '):
-                        msg = msg.split('p ', 1)[1]
-                        os.environ['msg'] = msg
-                    id = os.getenv('msg')
-                    id = ping_replace(id)
-                    try:
-                        member = author.guild.get_member(int(id))
-                        await member.edit(nick='proprieraryuser')
-                        await reply(f'**Successfully proprieraried {member.mention}\'s nickname.**')
-                        return
-                    except Exception as e:
-                        await reply(f'usage: `{p}proprietary <member>`\n**`Exception:`**` {e}`')
-                        return
-            else:
-                await reply(f'**{no} You do not have permission to use this command!**')
+            if msg.startswith('proprietary ') or msg.startswith('p '):
+                if msg.startswith('proprietary '):
+                    msg = msg.split('proprietary ', 1)[1]
+                    os.environ['msg'] = msg
+                if msg.startswith('p '):
+                    msg = msg.split('p ', 1)[1]
+                    os.environ['msg'] = msg
+                id = os.getenv('msg')
+                id = ping_replace(id)
+                try:
+                    member = author.guild.get_member(int(id))
+                    await member.edit(nick='proprieraryuser')
+                    await reply(f'**Successfully proprieraried {member.mention}\'s nickname.**')
+                    return
+                except Exception as e:
+                    await reply(f'usage: `{p}proprietary <member>`\n**`Exception:`**` {e}`')
+                    return
         # fosslist
         elif msg == 'fosslist': await reply('''> **Useful lists with FOSS alternatives and software:**
 <https://privacytools.io> -- **FOSS** and private alternatives to proprietary crap.
