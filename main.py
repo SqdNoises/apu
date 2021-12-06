@@ -755,6 +755,26 @@ Prefix: {prefix}
                 await delete()
                 await sendmsg('<a:ctp:901802005230661662>')
             else: await reply('**No.**')
+        # rules
+        elif msg == 'rules':
+            if author.id in admins or author.id == sqd:
+                await delete()
+                p = message.guild.get_member(840644782673100870)
+                await sendmsg('''> **Rules** (<#901519584102854687>)
+**1)** NO PROPRIETARY SOFTWARE.
+**2)** No bigotry
+**3)** No slurs
+**4)** No NSFW in non-NSFW channels
+**5)** No illegal stuff
+**6)** No arguing about stupid stuff
+**7)** NO BEING UNFUNNY!!!
+**8)** No spamming/chat flood
+**9)** No advertising except in <#901860994446405692>, and even then, only advertise open-source stuff
+**10)** English only
+**11)** No disagreeing with `{p.name}`.
+
+*Not following these rules will result in a mute, warn or ban depending on the severity of the rule you break and which rule you broke.*''')
+            else: await reply(f'**{no} You do not have permission to use this command!**')
         # rule <rule number>
         elif msg.startswith('rule'):
             if author.id in admins or author.id == sqd:
@@ -775,26 +795,6 @@ Prefix: {prefix}
                     await delete()
                 except:
                     await reply('That rule number doesn\'t exist...')
-            else: await reply(f'**{no} You do not have permission to use this command!**')
-        # rules
-        elif msg == 'rules':
-            if author.id in admins or author.id == sqd:
-                await delete()
-                p = message.guild.get_member(840644782673100870)
-                await sendmsg('''> **Rules** (<#901519584102854687>)
-**1)** NO PROPRIETARY SOFTWARE.
-**2)** No bigotry
-**3)** No slurs
-**4)** No NSFW in non-NSFW channels
-**5)** No illegal stuff
-**6)** No arguing about stupid stuff
-**7)** NO BEING UNFUNNY!!!
-**8)** No spamming/chat flood
-**9)** No advertising except in <#901860994446405692>, and even then, only advertise open-source stuff
-**10)** English only
-**11)** No disagreeing with `{p.name}`.
-
-*Not following these rules will result in a mute, warn or ban depending on the severity of the rule you break and which rule you broke.*''')
             else: await reply(f'**{no} You do not have permission to use this command!**')
         # meme
         elif msg == 'meme':
@@ -926,7 +926,7 @@ Usage: {p}reddit <subreddit>
             else: await reply(f'**{no} You do not have permission to use this command!**')
         # status <command> [input]
         elif msg.startswith('status'):
-            if author.id == goffy or author.id == sqd:
+            if author.id in admins or author.id == sqd:
                 if msg.startswith('status '):
                     if msg.startswith('status activity'):
                         if msg.startswith('status activity '):
@@ -1141,13 +1141,7 @@ Please note: I, a bot, cannot go invisible.
                     memid = ping_replace(mem)
                     try:
                         member = author.guild.get_member(int(memid))
-                        if author.id == goffy and member.id == goffy:
-                            await reply('No you can\'t warn yourself Mr. Gold Fish.')
-                            return
-                        elif member.id == goffy:
-                            await reply('What are you doing??? You can\'t warn the king!')
-                            return
-                        elif member.id == client.user.id:
+                        if member.id == client.user.id:
                             await reply('Bruh imagine warning me')
                             return
                         try:
