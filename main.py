@@ -1784,22 +1784,6 @@ Please note: I, a bot, cannot go invisible.
                 emb.set_author(name=f'gay r8 machine')
                 emb.set_footer(text=f'APU Utils | Made by {sqdname}', icon_url=client.user.avatar.url)
                 await reply(embed=emb)
-        # crash
-        elif msg == 'crash':
-            if author.id == sqd or author.id in admins:
-                await reply('**`client.close()`ing...**')
-                await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.watching, name=f'`client.close()`ed.'), status=nextcord.Status.dnd)
-                await logchannel.send(f'**{p}{msg}** called by Sqd. Trying to crash on railway!')
-                time = timenow()
-                print('\n{time} trying to crash lol')
-                await Cbsbs()
-                await gg(f='Goffy liek Tea!',fg='345')
-                await Nit
-                await time
-                await random.rsndint()
-                await e
-                await cmon_crash
-            else: await reply(f'**{no} You do not have permission to use this command!**')
         # proprietary
         elif msg.startswith('proprietary') or msg.startswith('p'):
             if msg.startswith('proprietary ') or msg.startswith('p '):
