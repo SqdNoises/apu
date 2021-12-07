@@ -286,6 +286,22 @@ class highlow_quit(nextcord.ui.View):
     @nextcord.ui.button(label='Quit', style=nextcord.ButtonStyle.red, disabled=True)
     async def quit(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         self.stop()
+        
+# pingpong
+class pingpong(nextcord.ui.View):
+    def __init__(self):
+        super().__init__()
+
+    @nextcord.ui.button(label='Pong! 🏓', style=nextcord.ButtonStyle.red)
+    async def pingpong(self, button: nextcord.ui.Button, interaction: nextcord.Interaction): await interaction.response.send_message("**Here's the link to the pong game:** https://github.com/flightcrank/pong 🏓\n\n*open source btw, || it's obvious lol ||*", ephemeral=True)
+
+# pingpong_disabled
+class pingpong_disabled(nextcord.ui.View):
+    def __init__(self):
+        super().__init__()
+
+    @nextcord.ui.button(label='Pong! 🏓', style=nextcord.ButtonStyle.red, disabled=True)
+    async def pingpong(self, button: nextcord.ui.Button, interaction: nextcord.Interaction): pass
 
 # on_message
 @client.event
@@ -645,6 +661,8 @@ Prefix: {prefix}
 **`{p}reddit <subreddit>`** - Sends a random post from the subreddit you specify
 **`{p}simprate`** - Check how much of a simp a person is!
 **`{p}gayrate`** - Check how gay a person is!
+**`{p}pingpong`** - Link to an open-source pong game
+**`{p}8ball <question>`** - Have a question? Ask the Magic 8 Ball!
 ''', inline=False)
             emb.add_field(name='Utilities', value=f'''
 **`{p}userinfo <member>`** - Replies with the info of the member mentioned/id specified
@@ -809,7 +827,7 @@ Prefix: {prefix}
             await embmeme.edit('**Loading Meme... ` Progress 0/2 `**')
             memeTitle = meme[0]
             memeLink = meme[1]
-            memeImage_url = meme[2]
+            memePreview = meme[2]
             memeSubreddit = meme[3]
             memeAuthor = meme[4]
             memeUpvotes = meme[5]
@@ -819,7 +837,7 @@ Prefix: {prefix}
             if memeNSFW:
                 emb = nextcord.Embed(title=memeTitle, description=f'`👍 Upvotes: `**`{memeUpvotes}`**   `💬 Comments: `**`{memeComments}`**\n**NSFW**', url=memeLink, color=dark_red)
                 emb.set_author(name=f'Posted by u/{memeAuthor} on {memeSubreddit}', icon_url=author.avatar.url)
-                emb.set_image(url=memeImage_url)
+                emb.set_image(url=memePreview)
                 emb.set_footer(text=f'APU Utils | Made by {sqdname}', icon_url=client.user.avatar.url)
                 await embmeme.edit('**Meme Loaded. ` Progress 2/2 `**')
                 await embmeme.edit('_ _', embed=emb)
@@ -846,7 +864,7 @@ Usage: {p}reddit <subreddit>
                 await embpost.edit('**Loading Post... ` Progress 0/2 `**')
                 postTitle = post[0]
                 postLink = post[1]
-                postImage_url = post[2]
+                postPreview = post[2]
                 postSubreddit = post[3]
                 postAuthor = post[4]
                 postUpvotes = post[5]
@@ -866,7 +884,7 @@ Usage: {p}reddit <subreddit>
                 else:
                     emb = nextcord.Embed(title=postTitle, description=f'`👍 Upvotes: `**`{postUpvotes}`**   `💬 Comments: `**`{postComments}`**   `👎 Downvotes (if any): `**`{postDownvotes}`**\n**Flair:** {postFlair}\n\n{postDescription}', url=postLink, color=blurple)
                     emb.set_author(name=f'Posted by u/{postAuthor} on {postSubreddit}', icon_url=author.avatar.url)
-                    emb.set_image(url=postImage_url)
+                    emb.set_image(url=postPreview)
                     emb.set_footer(text=f'APU Utils | Made by {sqdname}', icon_url=client.user.avatar.url)
                     await embpost.edit('**Post Loaded. ` Progress 2/2 `**')
                     await embpost.edit('_ _', embed=emb)
@@ -1316,6 +1334,13 @@ Please note: I, a bot, cannot go invisible.
                     except Exception as e:await reply(f'**`Exception:`**` {e}`')
                 else: await reply('Please mention or specify a user id!')
             else: await reply(f'**{no} You do not have permission to use this command!**')
+        # pingpong
+        elif msg == 'pingpong':
+            view = pingpong()
+            t = await reply('**Ping... Pong!** 🏓', view=view)
+            await wait(60)
+            view = pingpong_disabled()
+            await t.edit('**Ping... Pong!** 🏓', view=view)
         # slowmode
         elif msg.startswith('slowmode'):
             if author.id in admins or author.id == sqd:
@@ -1804,6 +1829,58 @@ Please note: I, a bot, cannot go invisible.
 *Also allows you to specify the programming language and license.*''')
         # sourcecode
         elif msg == 'sc' or msg == 'sourcecode' or msg == 'source-code' or msg == 'source' or msg == 'code': await reply('shut up and here\'s my code: <https://github.com/SqdNoises/apu>')
+        # 8ball
+        elif msg.startswith('8ball') or msg.startswith('8b'):
+            if msg.startswith('8ball ') or msg.startswith('8b '):
+                responses = [
+                    "It is certain.",
+                    "It is decidedly so.",
+                    "Without a doubt.",
+                    "Yes - definitely.",
+                    "You may rely on it.",
+                    "As I see it, yes.",
+                    "Most likely.",
+                    "Outlook good.",
+                    "Yes.",
+                    "Signs point to yes.",
+                    "Reply hazy, try again.",
+                    "Ask again later.",
+                    "Better not tell you now.",
+                    "Cannot predict now.",
+                    "Concentrate and ask again.",
+                    "Don't count on it.",
+                    "My reply is no.",
+                    "My sources say no.",
+                    "Outlook not so good.",
+                    "Very doubtful."
+                ]
+                response = random.choice(responses)
+                try:
+                    question = msg.split('8ball ', 1)[1]
+                    os.environ[f'{message.id}8ball'] = question
+                except:
+                    question = msg.split('8b ', 1)[1]
+                    os.environ[f'{message.id}8ball'] = question
+                question = os.getenv(f'{message.id}8ball')
+                emb = nextcord.Embed(title=question, description=f'You have asked a question to the Magic 8 Ball, Let\'s see what answer you receive after shaking the Magic 8 Ball.', color=dark_theme)
+                emb.set_author(name=f'{author.name}\'s question to the Magic 8 Ball', icon_url=author.avatar.url)
+                emb.set_footer(text=f'APU Utils | Made by {sqdname}', icon_url=client.user.avatar.url)
+                emb.set_thumbnail(url='https://media.discordapp.net/attachments/910152824971726858/917683800589340692/1200px-8-Ball_Pool.svg-2.png')
+                ballR = await reply(embed=emb)
+                await wait(1)
+                emb = nextcord.Embed(title=question, description=f'You have asked a question to the Magic 8 Ball, Let\'s see what answer you receive after shaking the Magic 8 Ball.\n\n**Shaking the Magic 8 Ball...**', color=lighter_gray)
+                emb.set_author(name=f'{author.name}\'s question to the Magic 8 Ball', icon_url=author.avatar.url)
+                emb.set_footer(text=f'APU Utils | Made by {sqdname}', icon_url=client.user.avatar.url)
+                emb.set_thumbnail(url='https://media.discordapp.net/attachments/910152824971726858/917683800589340692/1200px-8-Ball_Pool.svg-2.png')
+                await ballR.edit(embed=emb)
+                await wait(round(random.uniform(3.5, 6), 5))
+                emb = nextcord.Embed(title=question, description=f'You have asked a question to the Magic 8 Ball, Let\'s see what answer you receive after shaking the Magic 8 Ball.\n\n**Reply from the Magic 8 Ball:** `🎱 {response}`', color=teal)
+                emb.set_author(name=f'{author.name}\'s question to the Magic 8 Ball', icon_url=author.avatar.url)
+                emb.set_footer(text=f'APU Utils | Made by {sqdname}', icon_url=client.user.avatar.url)
+                emb.set_thumbnail(url='https://media.discordapp.net/attachments/910152824971726858/917683800589340692/1200px-8-Ball_Pool.svg-2.png')
+                await ballR.edit(embed=emb)
+            elif msg == '8ball' or msg == '8b': await reply('Please also ask a question! `Usage: {p}8ball <question>`')
+            else: await reply(f'**Command `{p}{msg}` not found!**')
         ### TYPE COMMANDS ABOVE THIS LINE ###
         else: await reply(f'**Command `{p}{msg}` not found!**')
     

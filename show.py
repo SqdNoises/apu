@@ -1,4 +1,4 @@
-# Goffy's Bot - nextcord bot
+# APU Utils - nextcord bot
 # Importing Packages
 print('Importing packages...')
 print('  - Importing nextcord (fork of discord.py)...')
@@ -48,31 +48,33 @@ async def on_ready():
     print('')
 
 # NEXTCORD.UI
-class selectGender(nextcord.ui.Select):
-    def __init__(self):
-        genders = [
-            nextcord.SelectOption(label='Male', emoji='♂️'),
-            nextcord.SelectOption(label='Female', emoji='♀️'),
-            nextcord.SelectOption(label='Custom', emoji='<:cursed_flushed:914769560043946025>')
-        ]
-        super().__init__(placeholder='Select your gender', min_values=1, max_values=1, options=genders)
-    
-    async def callback(self, interaction: nextcord.Interaction):
-        await interaction.response.send_message(f'Gave you the role **`{self.values[0]}**`.', ephemeral=True)
-
-class selectGenderView(nextcord.ui.View):
+# pingpong
+class pingpong(nextcord.ui.View):
     def __init__(self):
         super().__init__()
-        self.add_item(selectGender())
+
+    @nextcord.ui.button(label='Pong! 🏓', style=nextcord.ButtonStyle.red)
+    async def pingpong(self, button: nextcord.ui.Button, interaction: nextcord.Interaction): await interaction.response.send_message("**Here's the link to the pong game:** https://github.com/flightcrank/pong 🏓\n\n*open source btw, || it's obvious lol ||*", ephemeral=True)
+
+# pingpong_disabled
+class pingpong_disabled(nextcord.ui.View):
+    def __init__(self):
+        super().__init__()
+
+    @nextcord.ui.button(label='Pong! 🏓', style=nextcord.ButtonStyle.red, disabled=True)
+    async def pingpong(self, button: nextcord.ui.Button, interaction: nextcord.Interaction): pass
 
 # on_message
 @client.event
 async def on_message(message):
-    msg = message.content.lower()
-    if msg == 'gender':
-        view = selectGenderView()
-        await message.channel.send('**Select your Gender!**', view=view)
+    # pingpong
+    if message.content == 'pingpong':
+        view = pingpong()
+        t = await message.reply('**Ping... Pong!** 🏓', view=view)
+        await asyncio.sleep(5)
+        view = pingpong_disabled()
+        await t.edit('**Ping... Pong!** 🏓', view=view)
 
-# logging into Goffy's Bot
-print("Logging into Goffy\'s Bot...\n\n")
+# logging into APU Utils
+print("Logging into APU Utils...\n\n")
 client.run(never_gonna_give_you_up)
